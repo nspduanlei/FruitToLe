@@ -1,4 +1,4 @@
-package com.ap88.yg.fruittole
+package com.ap88.yg.fruittole.domain
 
 import android.app.Activity
 import android.widget.Toast
