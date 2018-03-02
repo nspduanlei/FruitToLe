@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="19dp"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginRight="7dp"
+        android:background="@drawable/drawable_mq_info_tag"
+        android:text="推荐"
+        android:textColor="#ec534d"
+        android:textSize="9sp"/>
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="【重磅新闻】烟威地区8月19日苹果价格，【重磅新闻】烟威地区8月19日苹果价格，"
+        android:textColor="#323232"
+        android:textSize="13sp"/>
+
+</LinearLayout>

@@ -1,33 +1,26 @@
 package com.ap88.yg.fruittole.ui.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.View
-import com.ap88.yg.fruittole.R
-import com.ap88.yg.fruittole.domain.Person
-import com.ap88.yg.fruittole.ui.adapters.ForecastListAdapter
+import com.ap88.yg.fruittole.ui.activities.base.ProxyActivity
+import com.ap88.yg.fruittole.ui.fragments.BottomDelegate
+import com.ap88.yg.fruittole.ui.fragments.TestWebDelegate
+import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
+import qiu.niorgai.StatusBarCompat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity: ProxyActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val forecastList = findViewById<RecyclerView>(R.id.forecast_list)
-        forecastList.layoutManager = LinearLayoutManager(this)
+        //透明状态栏效果
+        StatusBarCompat.translucentStatusBar(this, true)
 
-        val items: MutableList<String> = mutableListOf()
-        for (i in 1..100) {
-            items.add(i.toString() + "-----------------------duanlei-----------------------")
-        }
 
-        forecastList.adapter = ForecastListAdapter(items)
     }
 
-    fun test(view: View) {
-        Person("hello").niceToast(this, "message")
+    override fun setRootDelegate(): BaseDelegate {
+        return BottomDelegate()
+//        return TestWebDelegate()
     }
 
 }

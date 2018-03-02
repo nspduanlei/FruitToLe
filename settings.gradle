@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':convenientbanner', ':fragmentation_core', ':fragmentation'
