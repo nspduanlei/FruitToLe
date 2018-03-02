@@ -32,7 +32,7 @@ public class TestFragmentActivity extends SupportActivity {
     ft = fm.beginTransaction();
 
     TestWebDelegate testWebDelegate = new TestWebDelegate();
-    final WebDelegateImpl webDelegate = WebDelegateImpl.create("http://192.168.7.100/#/test");
+    final WebDelegateImpl webDelegate = WebDelegateImpl.Companion.create("http://192.168.7.100/#/test");
 
 
     ft.add(R.id.fl_contains, testWebDelegate, "1");

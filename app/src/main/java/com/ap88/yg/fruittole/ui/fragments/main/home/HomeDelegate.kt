@@ -18,7 +18,9 @@ import com.ap88.yg.fruittole.domain.model.*
 import com.ap88.yg.fruittole.ui.adapters.CommonRecyclerAdapter
 import com.ap88.yg.fruittole.ui.adapters.HeadHomeRecyclerAdapter
 import com.ap88.yg.fruittole.ui.adapters.MyViewHolder
+import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
 import com.ap88.yg.fruittole.ui.fragments.bottom.BottomItemDelegate
+import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
 import com.ap88.yg.fruittole.ui.utils.AliYun
 import com.ap88.yg.fruittole.ui.utils.loadMore.ILoadMore
 import com.ap88.yg.fruittole.ui.utils.loadMore.LoadMoreHelp
@@ -44,7 +46,7 @@ class HomeDelegate : BottomItemDelegate() {
 
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         //设置滑动列表头部
-        initHead()
+        initList()
 
         //初始化刷新控件
         initSwipeRefresh()
@@ -122,7 +124,11 @@ class HomeDelegate : BottomItemDelegate() {
 
     private var mHeadViewHolder: HeadViewHolder? = null
 
-    private fun initHead() {
+    /**
+     * 页面list初始化
+     */
+    private fun initList() {
+        //上拉加载更多
         mLoadMoreHelp = LoadMoreHelp(object : ILoadMore {
             override fun loadMore() {
                 mCurPageNum++
@@ -198,8 +204,19 @@ class HomeDelegate : BottomItemDelegate() {
                 } else if (t.productTypeName == "求购") {
                     holder.setBgDrawable(R.id.tv_tag, R.drawable.drawable_tag_apple_info_type_req)
                             .setText(R.id.tv_price, String.format("%.1f~%.1f", t.amount, t.endAmount))
-
                 }
+
+                //item点击跳转
+                holder.setOnItemClickListener(object : MyViewHolder.OnItemClickListener {
+                    override fun onItemClick(v: View) {
+                        if (data != null && data!![holder.adapterPosition] != null) {
+
+                            getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create("https://yg.ap88.com/#/detail?id=" +
+                                    data!![holder.adapterPosition]!!.id))
+                        }
+
+                    }
+                })
             }
         }
         rv_scroll.adapter = mAdapter
@@ -388,7 +405,6 @@ class HomeDelegate : BottomItemDelegate() {
                 object : ApiCallback<Result<ListPage<AppleBean>>>() {
                     override fun onSuccess(t: Result<ListPage<AppleBean>>) {
                         mLoadMoreHelp.complete(t.data.rows.size, context)
-
                         if (mCurPageNum == 1) { //刷新
                             swipeRefresh.isRefreshing = false
                             mIsRefresh = false

@@ -1,7 +1,10 @@
 package com.ap88.yg.fruittole.data.server
 
+import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import com.ap88.yg.fruittole.domain.model.Result
+import com.ap88.yg.fruittole.ui.App
 import retrofit2.HttpException
 import rx.Subscriber
 
@@ -16,20 +19,31 @@ abstract class ApiCallback<T> : Subscriber<T>() {
 
 
     override fun onCompleted() {
+        Log.e("ApiCallback", "onCompleted----------------")
         onFinish()
     }
 
+    @SuppressLint("ShowToast")
     override fun onNext(t: T) {
+        Log.e("ApiCallback", "onNext----------------")
         if (t is Result<*>) {
             if (t.succeed) {
                 onSuccess(t)
+            } else {
+                Log.e("ApiCallback", "errorMsg:" + t.errorMsg + ", errorCode:" + t.errorCode)
             }
+        } else {
+            Log.e("ApiCallback", "数据格式错误----------------")
         }
     }
 
+    @SuppressLint("ShowToast")
     override fun onError(e: Throwable?) {
-        if (e is HttpException) {
+        Log.e("ApiCallback", "onError----------------")
 
+        Toast.makeText(App.instance.applicationContext, "网络错误", Toast.LENGTH_SHORT)
+
+        if (e is HttpException) {
             val code = e.code()
             var msg = e.message
 

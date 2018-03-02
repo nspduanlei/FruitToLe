@@ -5,7 +5,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <FrameLayout
+    <android.support.v7.widget.ContentFrameLayout
         android:id="@+id/fl_contains"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

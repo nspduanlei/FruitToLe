@@ -36,6 +36,9 @@ abstract class BaseDelegate : SwipeBackFragment() {
                 throw ClassCastException("setLayout() type must be int or View!")
             }
         }
+
+        //rootView.setPadding(0, StateBarUtil.getStatusBarHeight(activity!!), 0, 0)
+
         return rootView
     }
 
@@ -61,5 +64,10 @@ abstract class BaseDelegate : SwipeBackFragment() {
                 observable.observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe(subscriber))
+    }
+
+
+    fun <T : BaseDelegate> getParentDelegate(): T {
+        return parentFragment as T
     }
 }

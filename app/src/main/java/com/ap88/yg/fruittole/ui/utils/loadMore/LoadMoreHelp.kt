@@ -17,7 +17,7 @@ class LoadMoreHelp(mILoadMore: ILoadMore) {
     private var isLoading: Boolean = false //是否正在加载
     private var isEnd: Boolean = false //是否加载完所有列表数据
 
-    public val mOnScrollListener = object : RecyclerView.OnScrollListener() {
+    val mOnScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
             val layoutManager = recyclerView!!.layoutManager as LinearLayoutManager
             val visibleItemsCount = layoutManager.childCount
@@ -33,10 +33,11 @@ class LoadMoreHelp(mILoadMore: ILoadMore) {
         }
     }
 
-    public fun refresh() {
+    fun refresh() {
         isEnd = false
     }
-    public fun complete(listSize: Int, context: Context?) {
+
+    fun complete(listSize: Int, context: Context?) {
         isLoading = false
         if (listSize < PAGE_SIZE) {
             isEnd = true
@@ -45,7 +46,8 @@ class LoadMoreHelp(mILoadMore: ILoadMore) {
             }
         }
     }
-    public fun loadError() {
+
+    fun loadError() {
         isLoading = false
     }
 

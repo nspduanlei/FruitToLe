@@ -12,6 +12,9 @@ import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate;
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegate;
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Created by duanlei on 2018/1/6.
@@ -38,24 +41,31 @@ public class Router {
       return true;
     }
 
-    if (url.contains("page:")) {
-
-      Log.e("test0001", "url--------------" + url);
-      Log.e("test0001", "preFragment-----------"  + delegate.getPreFragment());
-
-
-      return true;
-    }
+//    if (url.contains("page:")) {
+//      Log.e("test0001", "url--------------" + url);
+//      Log.e("test0001", "preFragment-----------"  + delegate.getPreFragment());
+//      return true;
+//    }
 
     final BaseDelegate topDelegate = delegate.getTopDelegate();
-    final WebDelegateImpl webDelegate = WebDelegateImpl.create(url);
+
+    Log.e("test0001", "getTopDelegate-----------"  + topDelegate);
+
+    final WebDelegateImpl webDelegate = WebDelegateImpl.Companion.create(url);
     topDelegate.start(webDelegate);
     return true;
   }
 
   private void loadWebPage(WebView webView, String url) {
     if (webView != null) {
-      webView.loadUrl(url);
+
+      Map<String, String> extraHeaders;
+      extraHeaders = new HashMap<>();
+      extraHeaders.put("device", "Android");//设备标识(前面是key，后面是value)
+//      extraHeaders.put("version", "1.0");//版本号(前面是key，后面是value)
+      webView.loadUrl(url, extraHeaders);
+
+//      webView.loadUrl(url);
     } else {
       throw new NullPointerException("WebView is null!");
     }
