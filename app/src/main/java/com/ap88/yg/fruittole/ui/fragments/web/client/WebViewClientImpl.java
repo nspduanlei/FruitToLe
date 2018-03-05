@@ -30,7 +30,7 @@ public class WebViewClientImpl extends WebViewClient {
 
   @Override
   public boolean shouldOverrideUrlLoading(WebView view, String url) {
-    return Router.getInstance().handleWebUrl(DELEGATE, url);
+    return Router.Companion.getInstance().handleWebUrl(DELEGATE, url);
   }
 
   //获取浏览器cookie

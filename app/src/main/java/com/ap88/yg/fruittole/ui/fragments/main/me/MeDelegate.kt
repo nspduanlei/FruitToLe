@@ -20,7 +20,12 @@ class MeDelegate: BottomItemDelegate() {
 
         //https://yg.ap88.com/#/login
 
-        loadRootFragment(R.id.fl_contains,
-                WebDelegateImpl.create("http://192.168.7.100/#/test"))
+        val webDelegateImpl = WebDelegateImpl.create("http://192.168.7.100/#/pcApp")
+        webDelegateImpl.topDelegate = this.getParentDelegate()
+
+        loadRootFragment(R.id.fl_contains, webDelegateImpl)
+
+//        loadRootFragment(R.id.fl_contains,
+//                WebDelegateImpl.create("http://192.168.7.100/#/test"))
     }
 }

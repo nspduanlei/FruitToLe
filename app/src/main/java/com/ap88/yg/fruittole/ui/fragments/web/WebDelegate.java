@@ -34,7 +34,6 @@ public abstract class WebDelegate extends BaseDelegate implements IWebViewInitia
     initWebView();
   }
 
-
   @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
   private void initWebView() {
     if (mWebView != null) {

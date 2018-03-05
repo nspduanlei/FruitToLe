@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.client.WebViewClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.route.RouteKeys
 import com.ap88.yg.fruittole.ui.fragments.web.route.Router
 import com.ap88.yg.fruittole.ui.widget.WebViewProgressBar
+import com.ap88.yg.fruittole.utils.StateBarUtil
 
 /**
  * Created by duanlei on 2018/1/6.
@@ -28,8 +30,14 @@ class WebDelegateImpl : WebDelegate() {
         if (url != null) {
             this.webView!!.addView(mProgressBar)
 
+            val lParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT)
+            lParams.setMargins(0, StateBarUtil.getStatusBarHeight(activity!!),
+                    0, 0)
+            rootView.layoutParams = lParams
+
             //用原生的方式模拟Web跳转并进行页面加载
-            Router.getInstance().loadPage(this, url)
+            Router.instance.loadPage(this, url)
         }
     }
 

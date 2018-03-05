@@ -8,6 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="mainActivity" parent="AppTheme">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <!--<item name="android:fitsSystemWindows">true</item>-->
+        <item name="android:windowDisablePreview">true</item>
+    </style>
 
     <style name="dialog" parent="@android:style/Theme.Dialog">
         <!--去掉边框-->

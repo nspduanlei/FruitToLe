@@ -22,13 +22,16 @@ import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
 import com.ap88.yg.fruittole.ui.fragments.bottom.BottomItemDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
 import com.ap88.yg.fruittole.ui.utils.AliYun
+import com.ap88.yg.fruittole.ui.utils.DialogUtils
 import com.ap88.yg.fruittole.ui.utils.loadMore.ILoadMore
 import com.ap88.yg.fruittole.ui.utils.loadMore.LoadMoreHelp
+import com.ap88.yg.fruittole.ui.utils.loadMore.LoginUtils
 import com.ap88.yg.fruittole.ui.widget.FlowLayout
 import com.ap88.yg.fruittole.utils.RequestUtils
 import com.ap88.yg.fruittole.utils.model.MenuEntity
 import com.bigkoo.convenientbanner.ConvenientBanner
 import kotlinx.android.synthetic.main.delegate_home.*
+import kotlinx.android.synthetic.main.layout_home_head.view.*
 import java.util.*
 
 /**
@@ -158,6 +161,22 @@ class HomeDelegate : BottomItemDelegate() {
                         override fun convert(holder: MyViewHolder, t: MenuEntity, position: Int) {
                             holder.setImageRes(R.id.iv_icon_menu, t.resId)
                                     .setText(R.id.tv_title, t.title)
+                        }
+                    }
+
+                    holder.headView.rl_guess.setOnClickListener {
+                        if(LoginUtils.isLogin()){
+
+                        } else {
+                            DialogUtils.showLoginAlertDiaLog(getParentDelegate())
+                        }
+                    }
+
+                    holder.headView.btn_sign.setOnClickListener {
+                        if(LoginUtils.isLogin()) {
+                            //TODO 签到
+                        } else {
+                            DialogUtils.showLoginAlertDiaLog(getParentDelegate())
                         }
                     }
 

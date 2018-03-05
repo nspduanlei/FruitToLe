@@ -65,6 +65,9 @@ dependencies {
         exclude group: 'com.android.support'
     })
 
+    //JSON
+    implementation 'com.alibaba:fastjson:1.2.41'
+
     //chrome接口拦截
     implementation "com.facebook.stetho:stetho-okhttp3:$stetho_version"
     implementation "com.facebook.stetho:stetho:$stetho_version"

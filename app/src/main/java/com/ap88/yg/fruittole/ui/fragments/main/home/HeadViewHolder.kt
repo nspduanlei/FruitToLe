@@ -14,6 +14,8 @@ import kotlinx.android.synthetic.main.layout_home_head.view.*
 class HeadViewHolder(mConvertView: View) :
         RecyclerView.ViewHolder(mConvertView) {
 
+    var headView = mConvertView
+
     var rvMenu: RecyclerView = mConvertView.rv_menu
     var marquee_view: MarqueeView = mConvertView.marquee_view
     var rvExpert: RecyclerView = mConvertView.rv_expert
