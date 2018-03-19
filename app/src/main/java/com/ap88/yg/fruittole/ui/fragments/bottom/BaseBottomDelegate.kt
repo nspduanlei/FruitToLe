@@ -7,6 +7,7 @@ import android.view.View
 import com.ap88.yg.fruittole.R
 import com.ap88.yg.fruittole.domain.model.BottomTabBean
 import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
+import com.ap88.yg.fruittole.ui.fragments.main.action.ActionDelegate
 import kotlinx.android.synthetic.main.delegate_base_bottom.*
 import kotlinx.android.synthetic.main.layout_bottom_item_icon_text.view.*
 import me.yokeyword.fragmentation.SupportFragment
@@ -86,11 +87,27 @@ abstract class BaseBottomDelegate: BaseDelegate(), View.OnClickListener {
         val delegateArray: Array<SupportFragment> =
                 itemFragments.toArray(arrayOf<SupportFragment>())
 
-
         loadMultipleRootFragment(R.id.cflContainer, mIndex,
                 *delegateArray)
 
+
+        /**
+         * 当前项目适配
+         */
+        iv_acton_add.setOnClickListener {
+//            this.start(ActionDelegate())
+            extraTransaction().startDontHideSelf(ActionDelegate())
+        }
     }
+
+    /**
+     * 当前项目适配
+     */
+    public fun setCurItem(index: Int) {
+        val item = llBottomBar.getChildAt(index)
+        item.performClick()
+    }
+
 
     override fun onClick(v: View) {
         val tag = v.tag as Int

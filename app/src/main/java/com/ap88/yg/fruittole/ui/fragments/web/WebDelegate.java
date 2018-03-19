@@ -18,6 +18,7 @@ import java.lang.ref.WeakReference;
 public abstract class WebDelegate extends BaseDelegate implements IWebViewInitializer {
 
   private WebView mWebView = null;
+
   private final ReferenceQueue<WebView> WEB_VIEW_QUEUE = new ReferenceQueue<>();
   private String mUrl = null;
   private boolean mIsWebViewAvailable = false;
@@ -31,17 +32,21 @@ public abstract class WebDelegate extends BaseDelegate implements IWebViewInitia
     super.onCreate(savedInstanceState);
     final Bundle args = getArguments();
     mUrl = args.getString(RouteKeys.URL.name());
+
     initWebView();
   }
 
+
   @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
   private void initWebView() {
+
     if (mWebView != null) {
       mWebView.removeAllViews();
       mWebView.destroy();
     } else {
       final IWebViewInitializer initializer = setInitializer();
       if (initializer != null) {
+
         final WeakReference<WebView> webViewWeakReference = new WeakReference<>
             (new WebView(getContext()), WEB_VIEW_QUEUE);
         mWebView = webViewWeakReference.get();

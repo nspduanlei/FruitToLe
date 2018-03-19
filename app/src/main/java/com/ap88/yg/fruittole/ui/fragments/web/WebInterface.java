@@ -10,14 +10,14 @@ import com.ap88.yg.fruittole.ui.fragments.web.event.EventManager;
  * Created by duanlei on 2018/1/6.
  *
  */
-final class WebInterface {
+public final class WebInterface {
   private final WebDelegate DELEGATE;
 
   private WebInterface(WebDelegate delegate) {
     this.DELEGATE = delegate;
   }
 
-  static WebInterface create(WebDelegate delegate) {
+  public static WebInterface create(WebDelegate delegate) {
     return new WebInterface(delegate);
   }
 

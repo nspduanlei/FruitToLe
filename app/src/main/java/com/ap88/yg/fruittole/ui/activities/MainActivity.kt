@@ -6,7 +6,7 @@ import com.ap88.yg.fruittole.ui.fragments.BottomDelegate
 import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
 import qiu.niorgai.StatusBarCompat
 
-class MainActivity: ProxyActivity() {
+class MainActivity : ProxyActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,8 +16,12 @@ class MainActivity: ProxyActivity() {
     }
 
     override fun setRootDelegate(): BaseDelegate {
+//        val webDelegateImpl = BottomDelegate()
+//        Handler().postDelayed({
+//            webDelegateImpl.start(WebDelegateImpl.create(ApiStores.URL_WEB))
+//        }, 100)
         return BottomDelegate()
-//        return TestWebDelegate()
     }
+
 
 }

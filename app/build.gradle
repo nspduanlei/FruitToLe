@@ -74,6 +74,8 @@ dependencies {
     implementation project(':convenientbanner')
     implementation project(':fragmentation_core')
     implementation project(':fragmentation')
+
+    implementation 'com.jcodecraeer:xrecyclerview:1.5.9'
 }
 
 kotlin {

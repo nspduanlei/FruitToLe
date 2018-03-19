@@ -7,14 +7,17 @@ import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.webkit.URLUtil
 import android.webkit.WebView
+import com.ap88.yg.fruittole.extensions.DelegatesExt
+import com.ap88.yg.fruittole.ui.App
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
+import me.yokeyword.fragmentation.ISupportFragment.SINGLETOP
 
 
 /**
  * Created by duanlei on 2018/1/6.
+ *
  */
-
 class Router private constructor() {
 
     companion object {
@@ -26,11 +29,11 @@ class Router private constructor() {
         val INSTANCE = Router()
     }
 
-    //private var curUrl: String by DelegatesExt.preference(App.instance.applicationContext, "curUrl", "")
+    private var curUrl: String by DelegatesExt.preference(App.instance.applicationContext, "curUrl", "")
 
     fun handleWebUrl(delegate: WebDelegate, url: String): Boolean {
         var url = url
-        Log.e("test0001", "url--------------" + url)
+        Log.e("test0001", "url-------------$url")
 
         //如果是电话协议
         if (url.contains("tel:")) {
@@ -38,20 +41,22 @@ class Router private constructor() {
             return true
         }
 
+        //----------控制请求路由---------
 //        if (url.contains("page:")) {
 //            url = url.replaceFirst("page".toRegex(), "http")
-//            Log.e("test0001", "url replace-----------" + url)
+//            Log.e("test0001", "url replace-----------$url")
 //            //      return true;
 //        }
-//        Log.e("test0001", "curUrl--------------" + curUrl)
+//        Log.e("test0001", "curUrl--------------$curUrl")
 //        if (url == curUrl) {
 //           return true
 //        }
 //        curUrl = url
+        //-----------控制请求路由end------
 
         val topDelegate = delegate.topDelegate
         val webDelegate = WebDelegateImpl.create(url)
-        topDelegate.start(webDelegate)
+        topDelegate.start(webDelegate, SINGLETOP)
         return true
     }
 
@@ -64,7 +69,7 @@ class Router private constructor() {
     }
 
     private fun loadLocalPage(webView: WebView?, url: String) {
-        loadWebPage(webView, "file:///android_asset/" + url)
+        loadWebPage(webView, "file:///android_asset/$url")
     }
 
     private fun loadPage(webView: WebView?, url: String) {

@@ -19,13 +19,11 @@ abstract class ApiCallback<T> : Subscriber<T>() {
 
 
     override fun onCompleted() {
-        Log.e("ApiCallback", "onCompleted----------------")
         onFinish()
     }
 
     @SuppressLint("ShowToast")
     override fun onNext(t: T) {
-        Log.e("ApiCallback", "onNext----------------")
         if (t is Result<*>) {
             if (t.succeed) {
                 onSuccess(t)
@@ -39,7 +37,9 @@ abstract class ApiCallback<T> : Subscriber<T>() {
 
     @SuppressLint("ShowToast")
     override fun onError(e: Throwable?) {
-        Log.e("ApiCallback", "onError----------------")
+        if (e != null) {
+            Log.e("ApiCallback", "onError----------------" + e.message)
+        }
 
         Toast.makeText(App.instance.applicationContext, "网络错误", Toast.LENGTH_SHORT)
 
@@ -47,7 +47,7 @@ abstract class ApiCallback<T> : Subscriber<T>() {
             val code = e.code()
             var msg = e.message
 
-            Log.d("wxl", "code=" + code)
+            Log.d("wxl", "code=$code")
 
             if (code == 504) {
                 msg = "网络不给力"

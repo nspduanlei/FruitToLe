@@ -2,6 +2,7 @@ package com.ap88.yg.fruittole.ui.utils
 
 import android.app.Activity
 import android.support.v7.app.AlertDialog
+import com.ap88.yg.fruittole.data.server.ApiStores
 import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
 
@@ -40,7 +41,7 @@ object DialogUtils {
         }
         builder.setPositiveButton("确定") {
             dialog, _ ->
-            delegate.start(WebDelegateImpl.create("https://yg.ap88.com/#/login"))
+            delegate.start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/login"))
             dialog.dismiss()
         }
         val noticeDialog = builder.create()

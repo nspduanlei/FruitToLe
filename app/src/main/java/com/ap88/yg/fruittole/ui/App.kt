@@ -2,9 +2,7 @@ package com.ap88.yg.fruittole.ui
 
 import android.app.Application
 import com.ap88.yg.fruittole.extensions.DelegatesExt
-import com.ap88.yg.fruittole.ui.fragments.web.event.EventManager
-import com.ap88.yg.fruittole.ui.fragments.web.event.LoginEvent
-import com.ap88.yg.fruittole.ui.fragments.web.event.TestEvent
+import com.ap88.yg.fruittole.ui.fragments.web.event.*
 import com.facebook.stetho.Stetho
 
 /**
@@ -25,5 +23,8 @@ class App : Application() {
 
         EventManager.getInstance().addEvent("test", TestEvent())
                 .addEvent("login", LoginEvent())
+                .addEvent("logout", LogoutEvent())
+                .addEvent("back", BackEvent())
+
     }
 }

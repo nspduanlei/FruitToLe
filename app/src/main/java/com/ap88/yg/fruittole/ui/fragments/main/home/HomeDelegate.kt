@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -14,25 +15,26 @@ import android.widget.TextView
 import com.ap88.yg.fruittole.R
 import com.ap88.yg.fruittole.data.server.ApiCallback
 import com.ap88.yg.fruittole.data.server.ApiClient
+import com.ap88.yg.fruittole.data.server.ApiStores
 import com.ap88.yg.fruittole.domain.model.*
 import com.ap88.yg.fruittole.ui.adapters.CommonRecyclerAdapter
-import com.ap88.yg.fruittole.ui.adapters.HeadHomeRecyclerAdapter
 import com.ap88.yg.fruittole.ui.adapters.MyViewHolder
+import com.ap88.yg.fruittole.ui.fragments.BottomDelegate
 import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
 import com.ap88.yg.fruittole.ui.fragments.bottom.BottomItemDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
 import com.ap88.yg.fruittole.ui.utils.AliYun
 import com.ap88.yg.fruittole.ui.utils.DialogUtils
-import com.ap88.yg.fruittole.ui.utils.loadMore.ILoadMore
-import com.ap88.yg.fruittole.ui.utils.loadMore.LoadMoreHelp
-import com.ap88.yg.fruittole.ui.utils.loadMore.LoginUtils
+import com.ap88.yg.fruittole.ui.utils.LoginUtils
 import com.ap88.yg.fruittole.ui.widget.FlowLayout
 import com.ap88.yg.fruittole.utils.RequestUtils
 import com.ap88.yg.fruittole.utils.model.MenuEntity
 import com.bigkoo.convenientbanner.ConvenientBanner
+import com.jcodecraeer.xrecyclerview.XRecyclerView
 import kotlinx.android.synthetic.main.delegate_home.*
 import kotlinx.android.synthetic.main.layout_home_head.view.*
 import java.util.*
+
 
 /**
  * Created by duanlei on 2018/2/1.
@@ -40,12 +42,13 @@ import java.util.*
  */
 class HomeDelegate : BottomItemDelegate() {
 
-    private lateinit var mAdapter: HeadHomeRecyclerAdapter<AppleBean>
+    private lateinit var mAdapter: CommonRecyclerAdapter<AppleBean>
 
     override fun setLayout() = R.layout.delegate_home
 
     private var mIsRefresh = false
-    private lateinit var mLoadMoreHelp: LoadMoreHelp
+
+//    private lateinit var mLoadMoreHelp: LoadMoreHelp
 
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         //设置滑动列表头部
@@ -59,37 +62,58 @@ class HomeDelegate : BottomItemDelegate() {
 
         //获取网络数据
         getData()
+
+        bindClick()
+    }
+
+    private fun bindClick() {
+        tv_sel_location.setOnClickListener {
+            this.getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/province?sign=home"))
+        }
+
+        tv_search.setOnClickListener {
+            this.getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/search?search=" +
+                    tv_search.text))
+        }
+
+        fl_msg.setOnClickListener {
+            if (LoginUtils.checkLogin(this.getParentDelegate())) {
+                this.getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/messageInfo"))
+            }
+        }
     }
 
     @SuppressLint("ResourceAsColor")
     private fun initSwipeRefresh() {
-        swipeRefresh.setColorSchemeColors(R.color.swipe_color_1, R.color.swipe_color_2,
-                R.color.swipe_color_3, R.color.swipe_color_4)
-
-        swipeRefresh.setProgressViewOffset(true, 120, 300)
-
-        swipeRefresh.setOnRefreshListener {
-            totalDy = 0
-
-            mIsRefresh = true
-            if (mWeeklyListAdapter != null) {
-                mWeeklyListAdapter!!.clear()
-            }
-
-            mCurPageNum = 1
-            mLoadMoreHelp.refresh()
-
-            getData()
-            getHeadData()
-        }
+//        swipeRefresh.setColorSchemeColors(R.color.swipe_color_1, R.color.swipe_color_2,
+//                R.color.swipe_color_3, R.color.swipe_color_4)
+//
+//        swipeRefresh.setProgressViewOffset(true, 120, 300)
+//
+//        swipeRefresh.setOnRefreshListener {
+//            totalDy = 0
+//
+//            mIsRefresh = true
+//            if (mWeeklyListAdapter != null) {
+//                mWeeklyListAdapter!!.clear()
+//            }
+//
+//            mCurPageNum = 1
+//
+////            mLoadMoreHelp.refresh()
+//
+//            getData()
+//            getHeadData()
+//        }
     }
 
     /**
      * 获取数据
      */
     private fun getData() {
-        swipeRefresh.isRefreshing = true
+//        swipeRefresh.isRefreshing = true
         getListData()
+        getPreSearchInfo()
     }
 
     private fun getHeadData() {
@@ -103,15 +127,15 @@ class HomeDelegate : BottomItemDelegate() {
     var totalDy = 0
 
     private fun setScroll() {
-        rv_scroll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        xrv_home.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                Log.e("test", "totalDy------------$totalDy")
+
                 totalDy += dy
-                val toolbarHeight = if (mHeadViewHolder == null) {
-                    ll_title.height.toFloat()
-                } else {
-                    (mHeadViewHolder!!.convenientBanner.height -
-                            ll_title.height).toFloat()
-                }
+                val toolbarHeight =
+                        (header.convenientBanner.height -
+                                ll_title.height).toFloat()
+
                 if (totalDy <= toolbarHeight) {
                     val scale = totalDy / toolbarHeight
                     val alpha = scale * 255
@@ -120,74 +144,47 @@ class HomeDelegate : BottomItemDelegate() {
                 } else {
                     ll_title.setBackgroundResource(R.color.colorMain)
                 }
+
+                Log.e("test", "totalDy------------$totalDy")
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
             }
         })
-        rv_scroll.addOnScrollListener(mLoadMoreHelp.mOnScrollListener)
+
     }
 
-    private var mHeadViewHolder: HeadViewHolder? = null
 
     /**
      * 页面list初始化
      */
     private fun initList() {
-        //上拉加载更多
-        mLoadMoreHelp = LoadMoreHelp(object : ILoadMore {
-            override fun loadMore() {
+        xrv_home.layoutManager = LinearLayoutManager(context)
+        xrv_home.setLoadingListener(object : XRecyclerView.LoadingListener {
+            override fun onRefresh() {
+                totalDy = 0
+                mIsRefresh = true
+                if (mWeeklyListAdapter != null) {
+                    mWeeklyListAdapter!!.clear()
+                }
+                mCurPageNum = 1
+
+                getData()
+                getHeadData()
+            }
+
+            override fun onLoadMore() {
                 mCurPageNum++
-                mLoadMoreHelp.refresh()
-                mAdapter.insertedLoading()
                 getListData()
             }
         })
 
-        rv_scroll.layoutManager = LinearLayoutManager(context)
+        initHeader()
 
-        mAdapter = object : HeadHomeRecyclerAdapter<AppleBean>(activity!!,
+        xrv_home.addHeaderView(header)
+
+        mAdapter = object : CommonRecyclerAdapter<AppleBean>(activity!!,
                 R.layout.item_home_apple_info, mutableListOf()) {
-            override fun convertHead(holder: HeadViewHolder, position: Int) {
-
-                if (mHeadViewHolder == null) {
-                    mHeadViewHolder = holder
-                    //设置菜单
-                    holder.rvMenu.layoutManager = GridLayoutManager(context, 4)
-                    val items: MutableList<MenuEntity?> = mutableListOf()
-                    items.add(MenuEntity(R.drawable.btn_home_menu_market, "市场行情"))
-                    items.add(MenuEntity(R.drawable.btn_home_menu_sale, "求购信息"))
-                    items.add(MenuEntity(R.drawable.btn_home_menu_supply, "供应信息"))
-                    items.add(MenuEntity(R.drawable.btn_home_menu_circle, "果圈"))
-                    holder.rvMenu.adapter = object : CommonRecyclerAdapter<MenuEntity>(activity!!,
-                            R.layout.item_menu, items) {
-                        override fun convert(holder: MyViewHolder, t: MenuEntity, position: Int) {
-                            holder.setImageRes(R.id.iv_icon_menu, t.resId)
-                                    .setText(R.id.tv_title, t.title)
-                        }
-                    }
-
-                    holder.headView.rl_guess.setOnClickListener {
-                        if(LoginUtils.isLogin()){
-
-                        } else {
-                            DialogUtils.showLoginAlertDiaLog(getParentDelegate())
-                        }
-                    }
-
-                    holder.headView.btn_sign.setOnClickListener {
-                        if(LoginUtils.isLogin()) {
-                            //TODO 签到
-                        } else {
-                            DialogUtils.showLoginAlertDiaLog(getParentDelegate())
-                        }
-                    }
-
-                    //初始化每周上榜
-                    initWeeklyList(holder.rvExpert)
-                    //初始化轮播图
-                    initBanners()
-
-                    getHeadData()
-                }
-            }
 
             override fun convert(holder: MyViewHolder, t: AppleBean, position: Int) {
                 holder.setImageUrlRound(R.id.iv_apple_image, t.firstImageUrl + AliYun.HEAD_SUFFIX, 2)
@@ -230,21 +227,80 @@ class HomeDelegate : BottomItemDelegate() {
                     override fun onItemClick(v: View) {
                         if (data != null && data!![holder.adapterPosition] != null) {
 
-                            getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create("https://yg.ap88.com/#/detail?id=" +
-                                    data!![holder.adapterPosition]!!.id))
+                            getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(
+                                    ApiStores.URL_WEB + "#/detail?id=" +
+                                            data!![holder.adapterPosition]!!.id))
                         }
 
                     }
                 })
             }
         }
-        rv_scroll.adapter = mAdapter
+        xrv_home.adapter = mAdapter
     }
+
+    private lateinit var header: View
+
+    private fun initHeader() {
+        header = LayoutInflater.from(context).inflate(R.layout.layout_home_head, null, false)
+        //设置菜单
+        header.rv_menu.layoutManager = GridLayoutManager(context, 4)
+        val items: MutableList<MenuEntity?> = mutableListOf()
+        items.add(MenuEntity(R.drawable.btn_home_menu_market, "市场行情"))
+        items.add(MenuEntity(R.drawable.btn_home_menu_sale, "求购信息"))
+        items.add(MenuEntity(R.drawable.btn_home_menu_supply, "供应信息"))
+        items.add(MenuEntity(R.drawable.btn_home_menu_circle, "果圈"))
+        header.rv_menu.adapter = object : CommonRecyclerAdapter<MenuEntity>(activity!!,
+                R.layout.item_menu, items) {
+            override fun convert(holder: MyViewHolder, t: MenuEntity, position: Int) {
+                holder.setImageRes(R.id.iv_icon_menu, t.resId)
+                        .setText(R.id.tv_title, t.title)
+                        .setOnItemClickListener(object : MyViewHolder.OnItemClickListener {
+                            override fun onItemClick(v: View) {
+                                when (holder.adapterPosition) {
+                                    0 -> getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/news"))
+                                    1 -> getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/gq?gq=QGTYPE"))
+                                    2 -> getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/gq?gq=GYTYPE"))
+                                    3 -> {
+                                        val bottomDelegate = getParentDelegate<BaseDelegate>() as BottomDelegate
+                                        bottomDelegate.setCurItem(3)
+                                    }
+                                }
+                            }
+                        })
+            }
+        }
+
+        header.ll_guess.setOnClickListener {
+            if (mGuessInfo != null) {
+                getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(
+                        ApiStores.URL_WEB + "#/priveMovement?useId=" +
+                                mGuessInfo!!.id))
+            }
+        }
+
+        header.btn_sign.setOnClickListener {
+            if (LoginUtils.isLogin()) {
+                //签到
+                getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(
+                        ApiStores.URL_WEB + "#/signIN"))
+            } else {
+                DialogUtils.showLoginAlertDiaLog(getParentDelegate())
+            }
+        }
+
+        //初始化每周上榜
+        initWeeklyList(header.rv_expert)
+        //初始化轮播图
+        initBanners()
+        getHeadData()
+    }
+
 
     private val mBannerImages: MutableList<BannerListBean> = mutableListOf()
 
     private fun initBanners() {
-        val banner = mHeadViewHolder!!.convenientBanner as ConvenientBanner<BannerListBean>
+        val banner = header.convenientBanner as ConvenientBanner<BannerListBean>
         banner.setPages(
                 { BannerImageHolderView() }, mBannerImages)
                 //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
@@ -253,8 +309,7 @@ class HomeDelegate : BottomItemDelegate() {
                 .startTurning(10000) //4s自动滚动
                 .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
                 .setOnItemClickListener {
-
-                    //TODO 点击跳转
+                    getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(mBannerImages[it].url))
                 }.scrollDuration = 1000
     }
 
@@ -326,7 +381,7 @@ class HomeDelegate : BottomItemDelegate() {
                     override fun onSuccess(t: Result<List<BannerListBean>>) {
                         mBannerImages.clear()
                         mBannerImages.addAll(t.data)
-                        mHeadViewHolder!!.convenientBanner.notifyDataSetChanged()
+                        header.convenientBanner.notifyDataSetChanged()
                     }
 
                     override fun onFailure(msg: String?) {
@@ -378,20 +433,42 @@ class HomeDelegate : BottomItemDelegate() {
                 marqueeViews.add(moreView)
 
                 tvInfo1.text = mqMessage[i].content
+
+
+                tvInfo1.setOnClickListener {
+                    getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB +
+                            "#/newsDetail?id=" + mqMessage[i].id))
+                }
             }
             if (i % 2 == 1) {
                 tvInfo2!!.text = mqMessage[i].content
+
+                tvInfo2.setOnClickListener {
+                    getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB +
+                            "#/newsDetail?id=" + mqMessage[i].id))
+                }
             }
         }
-        mHeadViewHolder!!.marquee_view.setViews(marqueeViews)
+        header.marquee_view.setViews(marqueeViews)
     }
+
+    var mGuessInfo: GuessInfo? = null
 
     private fun getGuessInfoData() {
         addSubscription(ApiClient.retrofit().getGuessInfo(),
                 object : ApiCallback<Result<GuessInfo>>() {
                     override fun onSuccess(t: Result<GuessInfo>) {
-                        mHeadViewHolder!!.guessCount.text = t.data.totalUser.toString()
-                        mHeadViewHolder!!.guessTitle.text = String.format("%s(%s)",
+
+                        mGuessInfo = t.data
+                        if (mGuessInfo == null) {
+                            header.ll_guess.visibility = View.GONE
+                            return
+                        } else {
+                            header.ll_guess.visibility = View.VISIBLE
+                        }
+
+                        header.tv_guess_count.text = t.data.totalUser.toString()
+                        header.tv_guess_title.text = String.format("%s(%s)",
                                 t.data.title, t.data.content)
 
                         val pLeft: Int = if (t.data.totalUser == 0) {
@@ -399,8 +476,7 @@ class HomeDelegate : BottomItemDelegate() {
                         } else {
                             ((t.data.quotationHigh.toFloat() / t.data.totalUser.toFloat()) * 100).toInt()
                         }
-
-                        mHeadViewHolder!!.guessPro.setProgress(pLeft)
+                        header.guessView.setProgress(pLeft)
                     }
 
                     override fun onFailure(msg: String?) {
@@ -417,29 +493,24 @@ class HomeDelegate : BottomItemDelegate() {
         val params: MutableMap<String, Any> = mutableMapOf()
         params["keyWord"] = ""
         params["orderType"] = "DATEDES"
-        params["pageSize"] = LoadMoreHelp.PAGE_SIZE
+        params["pageSize"] = ApiStores.PAGE_SIZE
         params["pageNumber"] = mCurPageNum
         params["searchType"] = ""
         addSubscription(ApiClient.retrofit().getSupplyReqList(RequestUtils.getRequestBodyJson(params)),
                 object : ApiCallback<Result<ListPage<AppleBean>>>() {
                     override fun onSuccess(t: Result<ListPage<AppleBean>>) {
-                        mLoadMoreHelp.complete(t.data.rows.size, context)
                         if (mCurPageNum == 1) { //刷新
-                            swipeRefresh.isRefreshing = false
+                            xrv_home.refreshComplete()
                             mIsRefresh = false
                             mAdapter.addAllC(t.data.rows)
                         } else {
-                            mAdapter.removeLoading()
+                            xrv_home.loadMoreComplete()
                             mAdapter.addAll(t.data.rows)
                         }
                     }
 
                     override fun onFailure(msg: String?) {
-                        mLoadMoreHelp.loadError()
-                        mAdapter.removeLoading()
-                        if (swipeRefresh.isRefreshing) {
-                            swipeRefresh.isRefreshing = false
-                        }
+
                     }
 
                     override fun onFinish() {
@@ -447,5 +518,22 @@ class HomeDelegate : BottomItemDelegate() {
                 })
     }
 
+    private fun getPreSearchInfo() {
+        val params: MutableMap<String, Any> = mutableMapOf()
+        params["searchType"] = "YZSS"
+        addSubscription(ApiClient.retrofit().getPreSearch(RequestUtils.getRequestBody(params)),
+                object : ApiCallback<Result<PreSearch>>() {
+                    override fun onSuccess(t: Result<PreSearch>) {
+                        Log.e("test001", "keyword----------" + t.data.keyword)
+                        tv_search.text = t.data.keyword
+                    }
+
+                    override fun onFailure(msg: String?) {
+                    }
+
+                    override fun onFinish() {
+                    }
+                })
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.ap88.yg.fruittole.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Build;
@@ -23,6 +24,7 @@ public class TestActivity extends Activity{
   private ProgressDialog dialog;
   private WebView webView;
 
+  @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -82,6 +84,7 @@ public class TestActivity extends Activity{
     setWebView();
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
   private void setWebView() {
     //不能横行滚动

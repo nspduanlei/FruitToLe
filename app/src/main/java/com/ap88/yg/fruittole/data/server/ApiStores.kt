@@ -13,7 +13,13 @@ import rx.Observable
 interface ApiStores {
     companion object {
         //baseUrl
-        const val API_SERVER_URL = "https://yg.ap88.com/"
+//        const val API_SERVER_URL = "https://yg.ap88.com/"
+        const val API_SERVER_URL = "http://192.168.7.21:8889/"
+
+//        const val URL_WEB = "https://yg.ap88.com/"
+        const val URL_WEB = "http://192.168.7.64/"
+
+        const val PAGE_SIZE = 20
     }
 
     /**
@@ -38,6 +44,10 @@ interface ApiStores {
     //供求信息
     @POST("_node_product/_all.apno")
     fun getSupplyReqList(@Body requestBody: RequestBody): Observable<Result<ListPage<AppleBean>>>
+
+    //获取默认搜索关键字
+    @POST("yg-systemConfig-service/preSearch/getPreSearchInfo.apec")
+    fun getPreSearch(@Body requestBody: RequestBody): Observable<Result<PreSearch>>
 
     /**
      * ------------------首页接口 end----------------

@@ -56,7 +56,8 @@ class WebDelegateImpl : WebDelegate() {
     override fun initWebChromeClient(): WebChromeClient {
         mProgressBar = WebViewProgressBar(context)
         mProgressBar!!.layoutParams =
-                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT)
         //刚开始时候进度条不可见
         mProgressBar!!.visibility = View.GONE
 
