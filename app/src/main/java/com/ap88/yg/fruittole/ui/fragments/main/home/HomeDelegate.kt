@@ -1,6 +1,5 @@
 package com.ap88.yg.fruittole.ui.fragments.main.home
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
@@ -33,6 +32,7 @@ import com.bigkoo.convenientbanner.ConvenientBanner
 import com.jcodecraeer.xrecyclerview.XRecyclerView
 import kotlinx.android.synthetic.main.delegate_home.*
 import kotlinx.android.synthetic.main.layout_home_head.view.*
+import org.jetbrains.anko.toast
 import java.util.*
 
 
@@ -46,16 +46,13 @@ class HomeDelegate : BottomItemDelegate() {
 
     override fun setLayout() = R.layout.delegate_home
 
-    private var mIsRefresh = false
+    //private var mIsRefresh = false
 
 //    private lateinit var mLoadMoreHelp: LoadMoreHelp
 
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         //设置滑动列表头部
         initList()
-
-        //初始化刷新控件
-        initSwipeRefresh()
 
         //设置导航条的颜色渐变
         setScroll()
@@ -83,35 +80,10 @@ class HomeDelegate : BottomItemDelegate() {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
-    private fun initSwipeRefresh() {
-//        swipeRefresh.setColorSchemeColors(R.color.swipe_color_1, R.color.swipe_color_2,
-//                R.color.swipe_color_3, R.color.swipe_color_4)
-//
-//        swipeRefresh.setProgressViewOffset(true, 120, 300)
-//
-//        swipeRefresh.setOnRefreshListener {
-//            totalDy = 0
-//
-//            mIsRefresh = true
-//            if (mWeeklyListAdapter != null) {
-//                mWeeklyListAdapter!!.clear()
-//            }
-//
-//            mCurPageNum = 1
-//
-////            mLoadMoreHelp.refresh()
-//
-//            getData()
-//            getHeadData()
-//        }
-    }
-
     /**
      * 获取数据
      */
     private fun getData() {
-//        swipeRefresh.isRefreshing = true
         getListData()
         getPreSearchInfo()
     }
@@ -155,6 +127,8 @@ class HomeDelegate : BottomItemDelegate() {
     }
 
 
+    private var mIsEnd = false
+
     /**
      * 页面list初始化
      */
@@ -162,8 +136,9 @@ class HomeDelegate : BottomItemDelegate() {
         xrv_home.layoutManager = LinearLayoutManager(context)
         xrv_home.setLoadingListener(object : XRecyclerView.LoadingListener {
             override fun onRefresh() {
+                mIsEnd = false
                 totalDy = 0
-                mIsRefresh = true
+//                mIsRefresh = true
                 if (mWeeklyListAdapter != null) {
                     mWeeklyListAdapter!!.clear()
                 }
@@ -174,6 +149,10 @@ class HomeDelegate : BottomItemDelegate() {
             }
 
             override fun onLoadMore() {
+                if (mIsEnd) {
+                    xrv_home.loadMoreComplete()
+                    return
+                }
                 mCurPageNum++
                 getListData()
             }
@@ -501,11 +480,20 @@ class HomeDelegate : BottomItemDelegate() {
                     override fun onSuccess(t: Result<ListPage<AppleBean>>) {
                         if (mCurPageNum == 1) { //刷新
                             xrv_home.refreshComplete()
-                            mIsRefresh = false
+                            //mIsRefresh = false
                             mAdapter.addAllC(t.data.rows)
                         } else {
+                            if (t.data.rows.size < ApiStores.PAGE_SIZE) {
+                                if (activity != null) {
+                                    activity!!.toast("没有更多记录")
+                                }
+                            }
                             xrv_home.loadMoreComplete()
                             mAdapter.addAll(t.data.rows)
+                        }
+
+                        if (t.data.rows.size < ApiStores.PAGE_SIZE) {
+                            mIsEnd = true
                         }
                     }
 

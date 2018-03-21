@@ -25,6 +25,7 @@ class App : Application() {
                 .addEvent("login", LoginEvent())
                 .addEvent("logout", LogoutEvent())
                 .addEvent("back", BackEvent())
+                .addEvent("page", PageEvent())
 
     }
 }

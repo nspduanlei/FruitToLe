@@ -7,6 +7,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import com.ap88.yg.fruittole.R
 import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.client.WebViewClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.route.RouteKeys
@@ -26,6 +27,7 @@ class WebDelegateImpl : WebDelegate() {
         return webView
     }
 
+
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         if (url != null) {
             this.webView!!.addView(mProgressBar)
@@ -38,8 +40,32 @@ class WebDelegateImpl : WebDelegate() {
 
             //用原生的方式模拟Web跳转并进行页面加载
             Router.instance.loadPage(this, url)
+
+
         }
     }
+
+    private fun hideBg() {
+        if (activity != null) {
+            activity!!.window.setBackgroundDrawable(null)
+        }
+    }
+    private fun showBg() {
+        if (activity != null) {
+            activity!!.window.setBackgroundDrawableResource(R.color.colorBlack)
+        }
+    }
+
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        showBg()
+    }
+
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        hideBg()
+    }
+
 
     override fun setInitializer(): IWebViewInitializer {
         return this

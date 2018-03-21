@@ -11,7 +11,6 @@ import com.ap88.yg.fruittole.extensions.DelegatesExt
 import com.ap88.yg.fruittole.ui.App
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
-import me.yokeyword.fragmentation.ISupportFragment.SINGLETOP
 
 
 /**
@@ -56,7 +55,7 @@ class Router private constructor() {
 
         val topDelegate = delegate.topDelegate
         val webDelegate = WebDelegateImpl.create(url)
-        topDelegate.start(webDelegate, SINGLETOP)
+        topDelegate.start(webDelegate)
         return true
     }
 

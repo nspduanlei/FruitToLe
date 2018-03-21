@@ -24,7 +24,6 @@ public abstract class WebDelegate extends BaseDelegate implements IWebViewInitia
   private boolean mIsWebViewAvailable = false;
   private BaseDelegate mTopDelegate = null;
 
-
   public abstract IWebViewInitializer setInitializer();
 
   @Override
@@ -36,17 +35,14 @@ public abstract class WebDelegate extends BaseDelegate implements IWebViewInitia
     initWebView();
   }
 
-
   @SuppressLint({"JavascriptInterface", "AddJavascriptInterface"})
   private void initWebView() {
-
     if (mWebView != null) {
       mWebView.removeAllViews();
       mWebView.destroy();
     } else {
       final IWebViewInitializer initializer = setInitializer();
       if (initializer != null) {
-
         final WeakReference<WebView> webViewWeakReference = new WeakReference<>
             (new WebView(getContext()), WEB_VIEW_QUEUE);
         mWebView = webViewWeakReference.get();
