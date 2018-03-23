@@ -7,13 +7,13 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
-import com.ap88.yg.fruittole.R
 import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.client.WebViewClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.route.RouteKeys
 import com.ap88.yg.fruittole.ui.fragments.web.route.Router
 import com.ap88.yg.fruittole.ui.widget.WebViewProgressBar
 import com.ap88.yg.fruittole.utils.StateBarUtil
+import qiu.niorgai.StatusBarCompat
 
 /**
  * Created by duanlei on 2018/1/6.
@@ -27,7 +27,6 @@ class WebDelegateImpl : WebDelegate() {
         return webView
     }
 
-
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         if (url != null) {
             this.webView!!.addView(mProgressBar)
@@ -40,19 +39,21 @@ class WebDelegateImpl : WebDelegate() {
 
             //用原生的方式模拟Web跳转并进行页面加载
             Router.instance.loadPage(this, url)
-
-
         }
     }
 
     private fun hideBg() {
         if (activity != null) {
-            activity!!.window.setBackgroundDrawable(null)
+            //activity!!.window.setBackgroundDrawable(null)
+//            StatusBarCompat.setStatusBarColor(activity!!,
+//                    Color.parseColor("#000000"))
+            StatusBarCompat.translucentStatusBar(activity!!, true)
         }
     }
     private fun showBg() {
         if (activity != null) {
-            activity!!.window.setBackgroundDrawableResource(R.color.colorBlack)
+            //activity!!.window.setBackgroundDrawableResource(R.color.colorBlack)
+            StatusBarCompat.translucentStatusBar(activity!!, false)
         }
     }
 

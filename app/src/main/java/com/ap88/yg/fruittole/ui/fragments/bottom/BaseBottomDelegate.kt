@@ -58,6 +58,8 @@ abstract class BaseBottomDelegate: BaseDelegate(), View.OnClickListener {
             tabBeans.add(item.key)
             itemFragments.add(item.value)
         }
+
+        //initSubscription()
     }
 
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {

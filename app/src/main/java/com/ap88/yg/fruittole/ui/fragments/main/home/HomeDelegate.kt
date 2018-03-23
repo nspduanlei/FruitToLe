@@ -29,6 +29,7 @@ import com.ap88.yg.fruittole.ui.widget.FlowLayout
 import com.ap88.yg.fruittole.utils.RequestUtils
 import com.ap88.yg.fruittole.utils.model.MenuEntity
 import com.bigkoo.convenientbanner.ConvenientBanner
+import com.jcodecraeer.xrecyclerview.ProgressStyle
 import com.jcodecraeer.xrecyclerview.XRecyclerView
 import kotlinx.android.synthetic.main.delegate_home.*
 import kotlinx.android.synthetic.main.layout_home_head.view.*
@@ -101,7 +102,7 @@ class HomeDelegate : BottomItemDelegate() {
     private fun setScroll() {
         xrv_home.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                Log.e("test", "totalDy------------$totalDy")
+                //Log.e("test", "totalDy------------$totalDy")
 
                 totalDy += dy
                 val toolbarHeight =
@@ -116,8 +117,6 @@ class HomeDelegate : BottomItemDelegate() {
                 } else {
                     ll_title.setBackgroundResource(R.color.colorMain)
                 }
-
-                Log.e("test", "totalDy------------$totalDy")
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
@@ -126,7 +125,6 @@ class HomeDelegate : BottomItemDelegate() {
 
     }
 
-
     private var mIsEnd = false
 
     /**
@@ -134,6 +132,9 @@ class HomeDelegate : BottomItemDelegate() {
      */
     private fun initList() {
         xrv_home.layoutManager = LinearLayoutManager(context)
+
+        xrv_home.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin)
+
         xrv_home.setLoadingListener(object : XRecyclerView.LoadingListener {
             override fun onRefresh() {
                 mIsEnd = false
@@ -179,7 +180,7 @@ class HomeDelegate : BottomItemDelegate() {
 
 
                 t.productTags.mapTo(tagsList) {
-                    ProductTag(it, "#ffffff",
+                    ProductTag(it.tagName, "#ffffff",
                             R.drawable.drawable_tag_apple_info_y)
                 }
                 t.showSecondInfo.mapTo(tagsList) {
@@ -478,18 +479,20 @@ class HomeDelegate : BottomItemDelegate() {
         addSubscription(ApiClient.retrofit().getSupplyReqList(RequestUtils.getRequestBodyJson(params)),
                 object : ApiCallback<Result<ListPage<AppleBean>>>() {
                     override fun onSuccess(t: Result<ListPage<AppleBean>>) {
+                        Log.e("test002", "onSuccess------mCurPageNum----" + mCurPageNum)
+                        Log.e("test002", "onSuccess------size----" + t.data.rows.size)
+
                         if (mCurPageNum == 1) { //刷新
-                            xrv_home.refreshComplete()
-                            //mIsRefresh = false
                             mAdapter.addAllC(t.data.rows)
+                            xrv_home.refreshComplete()
                         } else {
                             if (t.data.rows.size < ApiStores.PAGE_SIZE) {
                                 if (activity != null) {
                                     activity!!.toast("没有更多记录")
                                 }
                             }
-                            xrv_home.loadMoreComplete()
                             mAdapter.addAll(t.data.rows)
+                            xrv_home.loadMoreComplete()
                         }
 
                         if (t.data.rows.size < ApiStores.PAGE_SIZE) {
@@ -498,7 +501,7 @@ class HomeDelegate : BottomItemDelegate() {
                     }
 
                     override fun onFailure(msg: String?) {
-
+                        Log.e("test002", "onFailure----------")
                     }
 
                     override fun onFinish() {

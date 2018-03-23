@@ -16,7 +16,6 @@ class PageEvent : Event() {
         //Log.e("test0001", params)
 
         val url = JSON.parseObject(params).getJSONObject("data").getString("url")
-
         val topDelegate = delegate.topDelegate
         val webDelegate = WebDelegateImpl.create(ApiStores.URL_WEB + url)
         topDelegate.start(webDelegate)

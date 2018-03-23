@@ -2,7 +2,9 @@ package com.ap88.yg.fruittole.ui.fragments.web.event
 
 import android.util.Log
 import android.widget.Toast
+import com.ap88.yg.fruittole.domain.model.MessageEvent
 import com.ap88.yg.fruittole.ui.utils.LoginUtils
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by duanlei on 2018/1/9.
@@ -17,6 +19,9 @@ class LogoutEvent : Event() {
         val token = ""
         LoginUtils.token = token
 
+        EventBus.getDefault().post(MessageEvent(1))
+
+        delegate.pop()
         return null
     }
 }

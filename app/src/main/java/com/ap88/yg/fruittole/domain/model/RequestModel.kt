@@ -48,7 +48,7 @@ data class AppleBean(val address: String,
                      val weight: Float,
                      val viewNum: Int,
                      val showSecondInfo: List<String>,
-                     val productTags: List<String>,
+                     val productTags: List<MyProductTag>,
                      val id: String)
 
 //果价竞猜
@@ -61,5 +61,8 @@ data class GuessInfo(val content: String,
 
 
 data class PreSearch(val keyword: String, val searchType: String)
+
+
+data class MyProductTag(val className: String, val sort: Int, val tagName: String)
 
 
