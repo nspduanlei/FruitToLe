@@ -19,7 +19,7 @@ class LogoutEvent : Event() {
         val token = ""
         LoginUtils.token = token
 
-        EventBus.getDefault().post(MessageEvent(1))
+        EventBus.getDefault().post(MessageEvent(MessageEvent.USER_UPDATE))
 
         delegate.pop()
         return null

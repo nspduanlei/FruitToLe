@@ -1,1 +1,1 @@
-include ':app', ':convenientbanner', ':fragmentation_core', ':fragmentation'
+include ':app', ':convenientbanner', ':fragmentation_core', ':fragmentation', ':SelImage', ':baselib'

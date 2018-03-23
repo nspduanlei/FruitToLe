@@ -10,5 +10,3 @@ data class BottomTabBean(val icon: Int, val title: String)
 data class ProductTag(val tagName: String,
                       val tagTextColor: String,
                       val tagBgRes: Int)
-
-data class MessageEvent(val id: Int)

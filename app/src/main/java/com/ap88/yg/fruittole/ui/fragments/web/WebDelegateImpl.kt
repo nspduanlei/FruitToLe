@@ -1,18 +1,24 @@
 package com.ap88.yg.fruittole.ui.fragments.web
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import com.ap88.yg.fruittole.domain.model.MessageEvent
 import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.client.WebViewClientImpl
 import com.ap88.yg.fruittole.ui.fragments.web.route.RouteKeys
 import com.ap88.yg.fruittole.ui.fragments.web.route.Router
 import com.ap88.yg.fruittole.ui.widget.WebViewProgressBar
 import com.ap88.yg.fruittole.utils.StateBarUtil
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import qiu.niorgai.StatusBarCompat
 
 /**
@@ -80,6 +86,8 @@ class WebDelegateImpl : WebDelegate() {
         return WebViewClientImpl(this)
     }
 
+    private lateinit var mWebChromeClient: WebChromeClientImpl
+
     override fun initWebChromeClient(): WebChromeClient {
         mProgressBar = WebViewProgressBar(context)
         mProgressBar!!.layoutParams =
@@ -88,7 +96,8 @@ class WebDelegateImpl : WebDelegate() {
         //刚开始时候进度条不可见
         mProgressBar!!.visibility = View.GONE
 
-        return WebChromeClientImpl(mProgressBar)
+        mWebChromeClient = WebChromeClientImpl(this, mProgressBar)
+        return mWebChromeClient
     }
 
     companion object {
@@ -98,6 +107,26 @@ class WebDelegateImpl : WebDelegate() {
             val delegate = WebDelegateImpl()
             delegate.arguments = args
             return delegate
+        }
+    }
+
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        EventBus.getDefault().register(this)
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public fun onMessageEvent(event: MessageEvent) {
+        Log.e("test007", "onMessageEvent-------------" + event.file)
+        if (event.id == MessageEvent.CHOOER_FILE) {
+            mWebChromeClient.onFileChooserBack(event.file)
         }
     }
 }

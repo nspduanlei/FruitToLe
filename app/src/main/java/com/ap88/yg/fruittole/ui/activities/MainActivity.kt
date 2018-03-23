@@ -1,12 +1,18 @@
 package com.ap88.yg.fruittole.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
-import com.ap88.yg.fruittole.ui.activities.base.ProxyActivity
+import com.ap88.yg.fruittole.domain.model.MessageEvent
+import com.ap88.yg.fruittole.ui.activities.base.PermissionActivity
 import com.ap88.yg.fruittole.ui.fragments.BottomDelegate
 import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
+import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
+import org.greenrobot.eventbus.EventBus
 import qiu.niorgai.StatusBarCompat
 
-class MainActivity : ProxyActivity() {
+
+
+class MainActivity : PermissionActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,12 +22,18 @@ class MainActivity : ProxyActivity() {
     }
 
     override fun setRootDelegate(): BaseDelegate {
-//        val webDelegateImpl = BottomDelegate()
-//        Handler().postDelayed({
-//            webDelegateImpl.start(WebDelegateImpl.create(ApiStores.URL_WEB))
-//        }, 100)
         return BottomDelegate()
     }
 
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (requestCode == WebChromeClientImpl.REQUEST_INPUT_FILE && resultCode == RESULT_OK && intent != null) {
+            val result = intent.data
+            if (result != null) {
+                EventBus.getDefault().post(MessageEvent(MessageEvent.CHOOER_FILE, result))
+            }
+        }
+    }
 
 }

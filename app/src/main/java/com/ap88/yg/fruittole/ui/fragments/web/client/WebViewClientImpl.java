@@ -68,8 +68,7 @@ public class WebViewClientImpl extends WebViewClient {
 
     //关闭图片加载阻塞
     view.getSettings().setBlockNetworkImage(false);
-
-
 //    MyLoader.stopLoading();
   }
+
 }

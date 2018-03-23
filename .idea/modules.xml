@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FruitToLe.iml" filepath="$PROJECT_DIR$/FruitToLe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SelImage/SelImage.iml" filepath="$PROJECT_DIR$/SelImage/SelImage.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/baselib/baselib.iml" filepath="$PROJECT_DIR$/baselib/baselib.iml" />
       <module fileurl="file://$PROJECT_DIR$/convenientbanner/convenientbanner.iml" filepath="$PROJECT_DIR$/convenientbanner/convenientbanner.iml" />
       <module fileurl="file://$PROJECT_DIR$/fragmentation/fragmentation.iml" filepath="$PROJECT_DIR$/fragmentation/fragmentation.iml" />
       <module fileurl="file://$PROJECT_DIR$/fragmentation_core/fragmentation_core.iml" filepath="$PROJECT_DIR$/fragmentation_core/fragmentation_core.iml" />

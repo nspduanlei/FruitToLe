@@ -19,7 +19,7 @@ class LoginEvent : Event() {
         val token = JSON.parseObject(params).getJSONObject("data").getString("token")
         LoginUtils.token = token
 
-        EventBus.getDefault().post(MessageEvent(1))
+        EventBus.getDefault().post(MessageEvent(MessageEvent.USER_UPDATE))
 
         return null
     }

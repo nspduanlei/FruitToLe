@@ -20,9 +20,11 @@ class CircleDelegate : BottomItemDelegate() {
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         //ll_root.setPadding(0, StateBarUtil.getStatusBarHeight(activity!!), 0, 0)
 
-        val webDelegateImpl = WebDelegateImpl.create(ApiStores.URL_WEB + "#/fruitCircleApp")
-        webDelegateImpl.topDelegate = this.getParentDelegate()
+        //file:///android_asset/upload_file/uploadfile.html
 
+        val webDelegateImpl = WebDelegateImpl.create(ApiStores.URL_WEB + "#/fruitCircleApp")
+        //val webDelegateImpl = WebDelegateImpl.create("file:///android_asset/upload_file/uploadfile.html")
+        webDelegateImpl.topDelegate = this.getParentDelegate()
         supportDelegate.loadRootFragment(R.id.fl_contains, webDelegateImpl)
     }
 }

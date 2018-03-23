@@ -1,11 +1,16 @@
 package com.ap88.yg.fruittole.ui.fragments.web.chromeclient;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JsResult;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import com.ap88.yg.fruittole.ui.fragments.web.WebDelegate;
 import com.ap88.yg.fruittole.ui.widget.WebViewProgressBar;
 
 /**
@@ -14,10 +19,11 @@ import com.ap88.yg.fruittole.ui.widget.WebViewProgressBar;
 
 public class WebChromeClientImpl extends WebChromeClient {
 
-
   private WebViewProgressBar mWebViewProgressBar;
+  private final WebDelegate DELEGATE;
 
-  public WebChromeClientImpl(WebViewProgressBar webViewProgressBar) {
+  public WebChromeClientImpl(WebDelegate delegate, WebViewProgressBar webViewProgressBar) {
+    DELEGATE = delegate;
     mWebViewProgressBar = webViewProgressBar;
   }
 
@@ -46,5 +52,71 @@ public class WebChromeClientImpl extends WebChromeClient {
   @Override
   public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
     return super.onJsAlert(view, url, message, result);
+  }
+
+
+  private ValueCallback<Uri[]> mUploadMessage;
+  private ValueCallback<Uri> mUploadMessageOld;
+
+  public static final int REQUEST_INPUT_FILE = 100;
+
+
+  // For Android 3.0+
+  public void openFileChooser(ValueCallback<Uri> uploadMsg) {
+    Log.e("test008", "onShowFileChooser-----------------1");
+    mUploadMessageOld = uploadMsg;
+    selectImage();
+  }
+
+  // For Android 3.0+
+  public void openFileChooser(ValueCallback uploadMsg, String acceptType) {
+    Log.e("test008", "onShowFileChooser-----------------2");
+    mUploadMessageOld = uploadMsg;
+    selectImage();
+  }
+
+  //For Android 4.1
+  public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+    Log.e("test008", "onShowFileChooser-----------------3");
+    mUploadMessageOld = uploadMsg;
+    selectImage();
+  }
+
+  // For Android 5.0+
+  @Override
+  public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
+                                   FileChooserParams fileChooserParams) {
+
+    Log.e("test008", "onShowFileChooser-----------------4");
+    mUploadMessage = filePathCallback;
+
+    selectImage();
+    return false;
+  }
+
+  private void selectImage() {
+    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+    i.addCategory(Intent.CATEGORY_OPENABLE);
+    i.setType("image/*");
+    if (DELEGATE.getActivity() != null) {
+      DELEGATE.getActivity().startActivityForResult(Intent.createChooser(i, "File Browser"),
+          REQUEST_INPUT_FILE);
+    }
+
+    //ImgSelUtil.gotoSelImg(DELEGATE.getActivity(), REQUEST_INPUT_FILE, false);
+  }
+
+
+  public void onFileChooserBack(Uri uri) {
+    Uri[] uriArr = new Uri[1];
+    uriArr[0] = uri;
+    if (mUploadMessage != null) {
+      mUploadMessage.onReceiveValue(uriArr);
+      mUploadMessage = null;
+    } else if (mUploadMessageOld != null) {
+      mUploadMessageOld.onReceiveValue(uri);
+      mUploadMessageOld = null;
+    }
+
   }
 }
