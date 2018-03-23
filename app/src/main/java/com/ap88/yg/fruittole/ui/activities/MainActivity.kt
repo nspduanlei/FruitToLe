@@ -2,6 +2,7 @@ package com.ap88.yg.fruittole.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import com.ap88.yg.fruittole.domain.model.MessageEvent
 import com.ap88.yg.fruittole.ui.activities.base.PermissionActivity
 import com.ap88.yg.fruittole.ui.fragments.BottomDelegate
@@ -28,9 +29,12 @@ class MainActivity : PermissionActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
+
+        Log.e("test007", "onActivityResult-----------")
         if (requestCode == WebChromeClientImpl.REQUEST_INPUT_FILE && resultCode == RESULT_OK && intent != null) {
             val result = intent.data
             if (result != null) {
+                Log.e("test007", "onActivityResult---------1--")
                 EventBus.getDefault().post(MessageEvent(MessageEvent.CHOOER_FILE, result))
             }
         }

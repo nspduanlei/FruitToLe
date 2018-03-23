@@ -1,6 +1,5 @@
 package com.ap88.yg.fruittole.ui.fragments.web
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -45,6 +44,8 @@ class WebDelegateImpl : WebDelegate() {
 
             //用原生的方式模拟Web跳转并进行页面加载
             Router.instance.loadPage(this, url)
+
+            EventBus.getDefault().register(this)
         }
     }
 
@@ -61,16 +62,6 @@ class WebDelegateImpl : WebDelegate() {
             //activity!!.window.setBackgroundDrawableResource(R.color.colorBlack)
             StatusBarCompat.translucentStatusBar(activity!!, false)
         }
-    }
-
-    override fun onSupportVisible() {
-        super.onSupportVisible()
-        showBg()
-    }
-
-    override fun onSupportInvisible() {
-        super.onSupportInvisible()
-        hideBg()
     }
 
 
@@ -111,18 +102,38 @@ class WebDelegateImpl : WebDelegate() {
     }
 
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        EventBus.getDefault().register(this)
-
+    override fun onSupportVisible() {
+        super.onSupportVisible()
+        showBg()
     }
 
-    override fun onDetach() {
-        super.onDetach()
+    override fun onSupportInvisible() {
+        super.onSupportInvisible()
+        hideBg()
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+
+//    @SuppressLint("MissingSuperCall")
+//    override fun onAttach(context: Context?) {
+//        super.onAttach(context)
+//        EventBus.getDefault().register(this)
+//
+//    }
+//
+//    @SuppressLint("MissingSuperCall")
+//    override fun onDetach() {
+//        super.onDetach()
+//        EventBus.getDefault().unregister(this)
+//    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public fun onMessageEvent(event: MessageEvent) {
         Log.e("test007", "onMessageEvent-------------" + event.file)
         if (event.id == MessageEvent.CHOOER_FILE) {

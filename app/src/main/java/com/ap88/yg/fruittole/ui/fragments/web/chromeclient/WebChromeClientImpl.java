@@ -91,7 +91,7 @@ public class WebChromeClientImpl extends WebChromeClient {
     mUploadMessage = filePathCallback;
 
     selectImage();
-    return false;
+    return true;
   }
 
   private void selectImage() {
@@ -99,6 +99,7 @@ public class WebChromeClientImpl extends WebChromeClient {
     i.addCategory(Intent.CATEGORY_OPENABLE);
     i.setType("image/*");
     if (DELEGATE.getActivity() != null) {
+      Log.e("test007", "DELEGATE.getActivity() != null-------------");
       DELEGATE.getActivity().startActivityForResult(Intent.createChooser(i, "File Browser"),
           REQUEST_INPUT_FILE);
     }
@@ -108,6 +109,8 @@ public class WebChromeClientImpl extends WebChromeClient {
 
 
   public void onFileChooserBack(Uri uri) {
+
+    Log.e("test007", "DELEGATE.getActivity() != null-------------");
     Uri[] uriArr = new Uri[1];
     uriArr[0] = uri;
     if (mUploadMessage != null) {
