@@ -35,7 +35,7 @@ dependencies {
 
     //Fragment依赖
 
-    //    implementation 'me.yokeyword:fragmentation:1.2.7'
+    // implementation 'me.yokeyword:fragmentation:1.2.7'
     implementation 'me.yokeyword:fragmentation-swipeback:1.2.7'
 
     //轮播图
