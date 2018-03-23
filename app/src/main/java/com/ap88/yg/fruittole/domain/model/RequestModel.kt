@@ -33,7 +33,7 @@ data class WeeklyListBean(val imageUrl: String,
 data class BannerListBean(val content: String, val url: String)
 
 data class MqInfoBean(val id: String,
-                      val content: String,
+                      val title: String,
                       val url: String)
 
 data class AppleBean(val address: String,

@@ -49,7 +49,6 @@ interface ApiStores {
     //获取默认搜索关键字
     @POST("yg-systemConfig-service/preSearch/getPreSearchInfo.apec")
     fun getPreSearch(@Body requestBody: RequestBody): Observable<Result<PreSearch>>
-
     /**
      * ------------------首页接口 end----------------
      */

@@ -412,7 +412,7 @@ class HomeDelegate : BottomItemDelegate() {
 
                 marqueeViews.add(moreView)
 
-                tvInfo1.text = mqMessage[i].content
+                tvInfo1.text = mqMessage[i].title
 
 
                 tvInfo1.setOnClickListener {
@@ -421,7 +421,7 @@ class HomeDelegate : BottomItemDelegate() {
                 }
             }
             if (i % 2 == 1) {
-                tvInfo2!!.text = mqMessage[i].content
+                tvInfo2!!.text = mqMessage[i].title
 
                 tvInfo2.setOnClickListener {
                     getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(ApiStores.URL_WEB +
