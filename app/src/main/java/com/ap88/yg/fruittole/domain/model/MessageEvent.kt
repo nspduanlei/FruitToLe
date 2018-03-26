@@ -10,7 +10,9 @@ class MessageEvent {
 
     companion object {
         const val USER_UPDATE = 1
-        const val CHOOER_FILE = 2
+        const val CHOOSE_FILE = 2
+        const val CIRCLE_UPDATE = 3
+        const val HOME_UPDATE = 4
     }
 
     var id: Int = 0

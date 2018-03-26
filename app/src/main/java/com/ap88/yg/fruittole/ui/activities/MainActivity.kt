@@ -11,8 +11,6 @@ import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
 import org.greenrobot.eventbus.EventBus
 import qiu.niorgai.StatusBarCompat
 
-
-
 class MainActivity : PermissionActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +24,6 @@ class MainActivity : PermissionActivity() {
         return BottomDelegate()
     }
 
-
     public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
 
@@ -35,7 +32,7 @@ class MainActivity : PermissionActivity() {
             val result = intent.data
             if (result != null) {
                 Log.e("test007", "onActivityResult---------1--")
-                EventBus.getDefault().post(MessageEvent(MessageEvent.CHOOER_FILE, result))
+                EventBus.getDefault().post(MessageEvent(MessageEvent.CHOOSE_FILE, result))
             }
         }
     }

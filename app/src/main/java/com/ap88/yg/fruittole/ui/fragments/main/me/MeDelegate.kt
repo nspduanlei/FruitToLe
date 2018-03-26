@@ -21,24 +21,24 @@ class MeDelegate: BottomItemDelegate() {
         return R.layout.delegate_web
     }
 
+    lateinit var webDelegateImpl: WebDelegateImpl
+
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
-        update()
+        webDelegateImpl = WebDelegateImpl.create(ApiStores.URL_WEB + "#/pcApp")
+        webDelegateImpl.topDelegate = this.getParentDelegate()
+        loadRootFragment(R.id.fl_contains, webDelegateImpl)
+
         EventBus.getDefault().register(this)
     }
 
-    public fun update() {
-        val webDelegateImpl = WebDelegateImpl.create(ApiStores.URL_WEB + "#/pcApp")
-        webDelegateImpl.topDelegate = this.getParentDelegate()
-        loadRootFragment(R.id.fl_contains, webDelegateImpl)
+    private fun update() {
+        webDelegateImpl.refreshUrl()
     }
-
-    /**
-     * 总线机制
-     */
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public fun onMessageEvent(event: MessageEvent) {

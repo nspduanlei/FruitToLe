@@ -93,6 +93,8 @@ class WebDelegateImpl : WebDelegate() {
 
     companion object {
         fun create(url: String): WebDelegateImpl {
+
+            Log.e("test0006", "url----$url")
             val args = Bundle()
             args.putString(RouteKeys.URL.name, url)
             val delegate = WebDelegateImpl()
@@ -100,7 +102,6 @@ class WebDelegateImpl : WebDelegate() {
             return delegate
         }
     }
-
 
     override fun onSupportVisible() {
         super.onSupportVisible()
@@ -112,32 +113,29 @@ class WebDelegateImpl : WebDelegate() {
         hideBg()
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
 
-
-//    @SuppressLint("MissingSuperCall")
-//    override fun onAttach(context: Context?) {
-//        super.onAttach(context)
-//        EventBus.getDefault().register(this)
-//
-//    }
-//
-//    @SuppressLint("MissingSuperCall")
-//    override fun onDetach() {
-//        super.onDetach()
-//        EventBus.getDefault().unregister(this)
-//    }
-
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun onMessageEvent(event: MessageEvent) {
         Log.e("test007", "onMessageEvent-------------" + event.file)
-        if (event.id == MessageEvent.CHOOER_FILE) {
+        if (event.id == MessageEvent.CHOOSE_FILE) {
             mWebChromeClient.onFileChooserBack(event.file)
+        }
+    }
+
+    public fun refreshUrl() {
+        webView.reload()
+    }
+
+    override fun onBackPressedSupport(): Boolean {
+        return if (webView.canGoBack()) {
+            webView.goBack()
+            true
+        } else {
+            super.onBackPressedSupport()
         }
     }
 }

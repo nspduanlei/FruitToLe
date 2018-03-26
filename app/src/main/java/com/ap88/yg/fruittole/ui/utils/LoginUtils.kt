@@ -26,8 +26,11 @@ object LoginUtils {
         }
     }
 
-    fun gotoLogin(delegate: BaseDelegate) {
+    public fun gotoLogin(delegate: BaseDelegate) {
         delegate.start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/login"))
     }
 
+    public fun popToLogin(delegate: BaseDelegate) {
+        delegate.startWithPop(WebDelegateImpl.create(ApiStores.URL_WEB + "#/login"))
+    }
 }

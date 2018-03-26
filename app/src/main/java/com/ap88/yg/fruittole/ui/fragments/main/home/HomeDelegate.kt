@@ -33,6 +33,9 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle
 import com.jcodecraeer.xrecyclerview.XRecyclerView
 import kotlinx.android.synthetic.main.delegate_home.*
 import kotlinx.android.synthetic.main.layout_home_head.view.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.toast
 import java.util.*
 
@@ -44,13 +47,7 @@ import java.util.*
 class HomeDelegate : BottomItemDelegate() {
 
     private lateinit var mAdapter: CommonRecyclerAdapter<AppleBean>
-
     override fun setLayout() = R.layout.delegate_home
-
-    //private var mIsRefresh = false
-
-//    private lateinit var mLoadMoreHelp: LoadMoreHelp
-
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         //设置滑动列表头部
         initList()
@@ -62,6 +59,8 @@ class HomeDelegate : BottomItemDelegate() {
         getData()
 
         bindClick()
+
+        EventBus.getDefault().register(this)
     }
 
     private fun bindClick() {
@@ -127,6 +126,18 @@ class HomeDelegate : BottomItemDelegate() {
 
     private var mIsEnd = false
 
+    public fun doRefresh() {
+        mIsEnd = false
+        totalDy = 0
+        if (mWeeklyListAdapter != null) {
+            mWeeklyListAdapter!!.clear()
+        }
+        mCurPageNum = 1
+
+        getData()
+        getHeadData()
+    }
+
     /**
      * 页面list初始化
      */
@@ -137,16 +148,7 @@ class HomeDelegate : BottomItemDelegate() {
 
         xrv_home.setLoadingListener(object : XRecyclerView.LoadingListener {
             override fun onRefresh() {
-                mIsEnd = false
-                totalDy = 0
-//                mIsRefresh = true
-                if (mWeeklyListAdapter != null) {
-                    mWeeklyListAdapter!!.clear()
-                }
-                mCurPageNum = 1
-
-                getData()
-                getHeadData()
+                doRefresh()
             }
 
             override fun onLoadMore() {
@@ -527,4 +529,14 @@ class HomeDelegate : BottomItemDelegate() {
                 })
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun onMessageEvent(event: MessageEvent) {
+        doRefresh()
+    }
 }

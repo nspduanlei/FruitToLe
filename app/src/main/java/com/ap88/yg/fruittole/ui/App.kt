@@ -26,6 +26,9 @@ class App : Application() {
                 .addEvent("logout", LogoutEvent())
                 .addEvent("back", BackEvent())
                 .addEvent("page", PageEvent())
+                .addEvent("pubCircle", PubCircleEvent())
+                .addEvent("pubSD", PubSDEvent())
+                .addEvent("replaceLogin", ReplaceLoginEvent())
 
     }
 }
