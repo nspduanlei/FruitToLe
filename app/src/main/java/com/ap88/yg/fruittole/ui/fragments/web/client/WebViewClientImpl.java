@@ -41,7 +41,6 @@ public class WebViewClientImpl extends WebViewClient {
     if (manager.hasCookies()) {
       final String cookieStr = manager.getCookie(webHost);
       if (cookieStr != null && !cookieStr.equals("")) {
-
         if (DELEGATE.getContext() != null) {
           DelegatesExt.INSTANCE.preference(DELEGATE.getContext(), "cookie", cookieStr);
         }
@@ -61,7 +60,7 @@ public class WebViewClientImpl extends WebViewClient {
   @Override
   public void onPageFinished(WebView view, String url) {
     super.onPageFinished(view, url);
-    syncCookie();
+    //syncCookie();
     if (mIPageLoadListener != null) {
       mIPageLoadListener.onLoadEnd();
     }

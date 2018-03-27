@@ -64,9 +64,12 @@ class WebViewInitializer {
     settings.setDatabaseEnabled(true);
     settings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
+    settings.setSavePassword(false);
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
     }
+
     return webView;
   }
 

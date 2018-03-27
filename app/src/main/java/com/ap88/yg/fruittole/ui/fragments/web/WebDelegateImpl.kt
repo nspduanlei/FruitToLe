@@ -95,6 +95,7 @@ class WebDelegateImpl : WebDelegate() {
         fun create(url: String): WebDelegateImpl {
 
             Log.e("test0006", "url----$url")
+
             val args = Bundle()
             args.putString(RouteKeys.URL.name, url)
             val delegate = WebDelegateImpl()

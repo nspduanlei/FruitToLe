@@ -6,7 +6,6 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -143,9 +142,7 @@ class HomeDelegate : BottomItemDelegate() {
      */
     private fun initList() {
         xrv_home.layoutManager = LinearLayoutManager(context)
-
         xrv_home.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin)
-
         xrv_home.setLoadingListener(object : XRecyclerView.LoadingListener {
             override fun onRefresh() {
                 doRefresh()
@@ -201,7 +198,8 @@ class HomeDelegate : BottomItemDelegate() {
                             .setText(R.id.tv_price, t.amount.toString())
                 } else if (t.productTypeName == "求购") {
                     holder.setBgDrawable(R.id.tv_tag, R.drawable.drawable_tag_apple_info_type_req)
-                            .setText(R.id.tv_price, String.format("%.1f~%.1f", t.amount, t.endAmount))
+                            .setText(R.id.tv_price, String.format("%.1f~%.1f", t.startAmount,
+                                    t.endAmount))
                 }
 
                 //item点击跳转
@@ -481,9 +479,6 @@ class HomeDelegate : BottomItemDelegate() {
         addSubscription(ApiClient.retrofit().getSupplyReqList(RequestUtils.getRequestBodyJson(params)),
                 object : ApiCallback<Result<ListPage<AppleBean>>>() {
                     override fun onSuccess(t: Result<ListPage<AppleBean>>) {
-                        Log.e("test002", "onSuccess------mCurPageNum----" + mCurPageNum)
-                        Log.e("test002", "onSuccess------size----" + t.data.rows.size)
-
                         if (mCurPageNum == 1) { //刷新
                             mAdapter.addAllC(t.data.rows)
                             xrv_home.refreshComplete()
@@ -503,7 +498,6 @@ class HomeDelegate : BottomItemDelegate() {
                     }
 
                     override fun onFailure(msg: String?) {
-                        Log.e("test002", "onFailure----------")
                     }
 
                     override fun onFinish() {
@@ -517,7 +511,6 @@ class HomeDelegate : BottomItemDelegate() {
         addSubscription(ApiClient.retrofit().getPreSearch(RequestUtils.getRequestBody(params)),
                 object : ApiCallback<Result<PreSearch>>() {
                     override fun onSuccess(t: Result<PreSearch>) {
-                        Log.e("test001", "keyword----------" + t.data.keyword)
                         tv_search.text = t.data.keyword
                     }
 

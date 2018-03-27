@@ -41,6 +41,7 @@ data class AppleBean(val address: String,
                      val productTypeName: String, //供应 求购
                      val priceUnit: String,
                      val endAmount: Float,
+                     val startAmount: Float,
                      val showCredateTime: String,
                      val skuName: String,
                      val firstImageUrl: String,
