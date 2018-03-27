@@ -121,7 +121,6 @@ class WebDelegateImpl : WebDelegate() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun onMessageEvent(event: MessageEvent) {
-        Log.e("test007", "onMessageEvent-------------" + event.file)
         if (event.id == MessageEvent.CHOOSE_FILE) {
             mWebChromeClient.onFileChooserBack(event.file)
         }

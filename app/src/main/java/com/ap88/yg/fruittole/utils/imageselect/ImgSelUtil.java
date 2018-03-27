@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.widget.ImageView;
 
 import com.ap88.yg.fruittole.R;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.yuyh.library.imgsel.ImageLoader;
 import com.yuyh.library.imgsel.ImgSelActivity;
 import com.yuyh.library.imgsel.ImgSelConfig;
@@ -21,7 +21,7 @@ public class ImgSelUtil {
   private static ImageLoader loader = new ImageLoader() {
     @Override
     public void displayImage(Context context, String path, ImageView imageView) {
-      Picasso.with(context).load(path).into(imageView);
+      Glide.with(context).load(path).into(imageView);
     }
   };
 

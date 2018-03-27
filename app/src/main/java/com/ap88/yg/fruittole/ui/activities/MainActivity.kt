@@ -1,5 +1,6 @@
 package com.ap88.yg.fruittole.ui.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import com.ap88.yg.fruittole.ui.activities.base.PermissionActivity
 import com.ap88.yg.fruittole.ui.fragments.BottomDelegate
 import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
+import com.yuyh.library.imgsel.ImgSelActivity
 import org.greenrobot.eventbus.EventBus
 import qiu.niorgai.StatusBarCompat
 
@@ -27,13 +29,13 @@ class MainActivity : PermissionActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
 
-        Log.e("test007", "onActivityResult-----------")
-        if (requestCode == WebChromeClientImpl.REQUEST_INPUT_FILE && resultCode == RESULT_OK && intent != null) {
-            val result = intent.data
-            if (result != null) {
-                Log.e("test007", "onActivityResult---------1--")
-                EventBus.getDefault().post(MessageEvent(MessageEvent.CHOOSE_FILE, result))
-            }
+        if (requestCode == WebChromeClientImpl.REQUEST_INPUT_FILE) {
+
+            val result = if (intent == null || resultCode != Activity.RESULT_OK) null else
+                intent.getStringArrayListExtra(ImgSelActivity.INTENT_RESULT)
+
+            Log.e("test008", "onActivityResult-----------$result")
+            EventBus.getDefault().post(MessageEvent(MessageEvent.CHOOSE_FILE, result))
         }
     }
 

@@ -11,9 +11,7 @@ import android.text.Spanned
 import android.util.SparseArray
 import android.view.View
 import android.widget.*
-import com.ap88.yg.fruittole.utils.picasso.CircleTransform
-import com.ap88.yg.fruittole.utils.picasso.RoundTransform
-import com.squareup.picasso.Picasso
+import com.ap88.yg.fruittole.utils.imageload.ImageLoad
 
 /**
  * Created by duanlei on 16/9/21.
@@ -86,25 +84,31 @@ class MyViewHolder(private val mConvertView: View, private val mContext: Context
 
     fun setImageUrl(viewId: Int, url: String): MyViewHolder {
         val iv = getView<ImageView>(viewId)
-        Picasso.with(mContext).load(url).into(iv)
+//        Picasso.with(mContext).load(url).into(iv)
+        ImageLoad.loadUrl(mContext, iv, url)
         return this
     }
 
     fun setImageUrlRound(viewId: Int, url: String, radius: Int): MyViewHolder {
         val iv = getView<ImageView>(viewId)
-        Picasso.with(mContext)
-                .load(url)
-                .transform(RoundTransform(mContext, radius))
-                .into(iv)
+//        Image.with(mContext)
+//                .load(url)
+//                .transform(RoundTransform(mContext, radius))
+//                .into(iv)
+
+        ImageLoad.loadUrlRound(mContext, iv, url, radius)
         return this
     }
 
     fun setImageUrlCircle(viewId: Int, url: String): MyViewHolder {
         val iv = getView<ImageView>(viewId)
-        Picasso.with(mContext)
-                .load(url)
-                .transform(CircleTransform(mContext))
-                .into(iv)
+//        Picasso.with(mContext)
+//                .load(url)
+//                .transform(CircleTransform(mContext))
+//                .into(iv)
+
+        ImageLoad.loadUrlCircle(mContext, iv, url)
+
         return this
     }
 

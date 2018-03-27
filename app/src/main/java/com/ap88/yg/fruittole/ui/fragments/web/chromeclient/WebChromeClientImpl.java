@@ -1,6 +1,5 @@
 package com.ap88.yg.fruittole.ui.fragments.web.chromeclient;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +11,10 @@ import android.webkit.WebView;
 
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegate;
 import com.ap88.yg.fruittole.ui.widget.WebViewProgressBar;
+import com.ap88.yg.fruittole.utils.imageselect.ImgSelUtil;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Created by duanlei on 2018/1/8.
@@ -95,29 +98,36 @@ public class WebChromeClientImpl extends WebChromeClient {
   }
 
   private void selectImage() {
-    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-    i.addCategory(Intent.CATEGORY_OPENABLE);
-    i.setType("image/*");
-    if (DELEGATE.getActivity() != null) {
-      Log.e("test007", "DELEGATE.getActivity() != null-------------");
-      DELEGATE.getActivity().startActivityForResult(Intent.createChooser(i, "File Browser"),
-          REQUEST_INPUT_FILE);
-    }
+//    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+//    i.addCategory(Intent.CATEGORY_OPENABLE);
+//    i.setType("image/*");
+//    if (DELEGATE.getActivity() != null) {
+//      DELEGATE.getActivity().startActivityForResult(Intent.createChooser(i, "File Browser"),
+//          REQUEST_INPUT_FILE);
+//    }
 
-    //ImgSelUtil.gotoSelImg(DELEGATE.getActivity(), REQUEST_INPUT_FILE, false);
+    ImgSelUtil.gotoSelImg(DELEGATE.getActivity(), REQUEST_INPUT_FILE, false);
   }
 
 
-  public void onFileChooserBack(Uri uri) {
+  public void onFileChooserBack(List<String> uris) {
+    if (uris == null) {
+      mUploadMessage.onReceiveValue(null);
+      mUploadMessage = null;
+      mUploadMessageOld = null;
+      return;
+    }
 
-    Log.e("test007", "DELEGATE.getActivity() != null-------------");
-    Uri[] uriArr = new Uri[1];
-    uriArr[0] = uri;
+    Uri[] uriArr = new Uri[uris.size()];
+    for (String path: uris) {
+      uriArr[0] = Uri.fromFile(new File(path));
+    }
+
     if (mUploadMessage != null) {
       mUploadMessage.onReceiveValue(uriArr);
       mUploadMessage = null;
     } else if (mUploadMessageOld != null) {
-      mUploadMessageOld.onReceiveValue(uri);
+      mUploadMessageOld.onReceiveValue(uriArr[0]);
       mUploadMessageOld = null;
     }
 

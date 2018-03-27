@@ -24,6 +24,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -346,7 +347,9 @@ public class ImgSelFragment extends Fragment implements View.OnClickListener, Vi
             FileUtils.createFile(tempFile);
 
             Uri uri = FileProvider.getUriForFile(getActivity(),
-                Config.ApplicationId + ".provider", tempFile);
+                "com.ap88.yg.fruittole.provider", tempFile);
+
+            Log.e("test008", Config.ApplicationId + ".provider");
 
             List<ResolveInfo> resInfoList = getActivity().getPackageManager()
                     .queryIntentActivities(cameraIntent, PackageManager.MATCH_DEFAULT_ONLY);
