@@ -112,9 +112,13 @@ public class WebChromeClientImpl extends WebChromeClient {
 
   public void onFileChooserBack(List<String> uris) {
     if (uris == null) {
-      mUploadMessage.onReceiveValue(null);
-      mUploadMessage = null;
-      mUploadMessageOld = null;
+      if (mUploadMessage != null) {
+        mUploadMessage.onReceiveValue(null);
+        mUploadMessage = null;
+      } else if (mUploadMessageOld != null) {
+        mUploadMessageOld.onReceiveValue(null);
+        mUploadMessageOld = null;
+      }
       return;
     }
 
