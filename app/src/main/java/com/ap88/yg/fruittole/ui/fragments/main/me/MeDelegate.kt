@@ -21,7 +21,7 @@ class MeDelegate: BottomItemDelegate() {
         return R.layout.delegate_web
     }
 
-    lateinit var webDelegateImpl: WebDelegateImpl
+    private lateinit var webDelegateImpl: WebDelegateImpl
 
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
         webDelegateImpl = WebDelegateImpl.create(ApiStores.URL_WEB + "#/pcApp")
@@ -39,8 +39,7 @@ class MeDelegate: BottomItemDelegate() {
         EventBus.getDefault().unregister(this)
     }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public fun onMessageEvent(event: MessageEvent) {
         if (event.id == MessageEvent.USER_UPDATE) {
             update()

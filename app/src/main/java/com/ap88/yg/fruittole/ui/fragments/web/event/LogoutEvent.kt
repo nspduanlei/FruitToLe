@@ -1,8 +1,8 @@
 package com.ap88.yg.fruittole.ui.fragments.web.event
 
-import android.util.Log
 import com.ap88.yg.fruittole.domain.model.MessageEvent
 import com.ap88.yg.fruittole.ui.utils.LoginUtils
+import com.ap88.yg.fruittole.utils.T
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -12,14 +12,12 @@ import org.greenrobot.eventbus.EventBus
 class LogoutEvent : Event() {
 
     override fun execute(params: String): String? {
-//        Toast.makeText(context, params, Toast.LENGTH_LONG).show()
-        Log.e("test0001", params)
-
-        LoginUtils.token = ""
+        T.showShort(context, params)
 
         EventBus.getDefault().post(MessageEvent(MessageEvent.USER_UPDATE))
+        LoginUtils.token = ""
 
-        delegate.pop()
+//        delegate.pop()
         return null
     }
 }

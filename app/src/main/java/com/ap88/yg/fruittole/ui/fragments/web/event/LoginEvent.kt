@@ -3,6 +3,7 @@ package com.ap88.yg.fruittole.ui.fragments.web.event
 import com.alibaba.fastjson.JSON
 import com.ap88.yg.fruittole.domain.model.MessageEvent
 import com.ap88.yg.fruittole.ui.utils.LoginUtils
+import com.ap88.yg.fruittole.utils.T
 import org.greenrobot.eventbus.EventBus
 
 /**
@@ -12,8 +13,8 @@ import org.greenrobot.eventbus.EventBus
 class LoginEvent : Event() {
 
     override fun execute(params: String): String? {
-//        Toast.makeText(context, params, Toast.LENGTH_LONG).show()
-//        Log.e("test0001", params)
+
+        T.showShort(context, params)
 
         val token = JSON.parseObject(params).getJSONObject("data").getString("token")
         LoginUtils.token = token
