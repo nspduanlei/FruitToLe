@@ -48,6 +48,14 @@
         </provider>
 
 
+        <!-- umeng -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5abb2b74b27b0a1f35000126"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="${TD_CHANNEL_ID}"/>
+
     </application>
 
 </manifest>

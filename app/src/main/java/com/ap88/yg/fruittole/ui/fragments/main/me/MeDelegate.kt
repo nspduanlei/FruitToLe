@@ -40,7 +40,7 @@ class MeDelegate: BottomItemDelegate() {
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public fun onMessageEvent(event: MessageEvent) {
         if (event.id == MessageEvent.USER_UPDATE) {
             update()

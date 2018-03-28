@@ -22,6 +22,7 @@ import qiu.niorgai.StatusBarCompat
 
 /**
  * Created by duanlei on 2018/1/6.
+ *
  */
 class WebDelegateImpl : WebDelegate() {
 
@@ -93,9 +94,7 @@ class WebDelegateImpl : WebDelegate() {
 
     companion object {
         fun create(url: String): WebDelegateImpl {
-
             Log.e("test0006", "url----$url")
-
             val args = Bundle()
             args.putString(RouteKeys.URL.name, url)
             val delegate = WebDelegateImpl()

@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.OrientationHelper
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -164,7 +165,6 @@ class HomeDelegate : BottomItemDelegate() {
 
         mAdapter = object : CommonRecyclerAdapter<AppleBean>(activity!!,
                 R.layout.item_home_apple_info, mutableListOf()) {
-
             override fun convert(holder: MyViewHolder, t: AppleBean, position: Int) {
                 holder.setImageUrlRound(R.id.iv_apple_image, t.firstImageUrl + AliYun.HEAD_SUFFIX, 2)
                         .setText(R.id.tv_title, t.skuName)
@@ -205,11 +205,14 @@ class HomeDelegate : BottomItemDelegate() {
                 //item点击跳转
                 holder.setOnItemClickListener(object : MyViewHolder.OnItemClickListener {
                     override fun onItemClick(v: View) {
-                        if (data != null && data!![holder.adapterPosition] != null) {
 
+                        Log.e("test009", "holder.adapterPosition---------" +
+                                holder.adapterPosition)
+
+                        if (data != null && data!![holder.adapterPosition - 2] != null) {
                             getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(
                                     ApiStores.URL_WEB + "#/detail?id=" +
-                                            data!![holder.adapterPosition]!!.id))
+                                            data!![holder.adapterPosition - 2]!!.id))
                         }
 
                     }
@@ -251,6 +254,7 @@ class HomeDelegate : BottomItemDelegate() {
             }
         }
 
+        //果价猜猜猜
         header.ll_guess.setOnClickListener {
             if (mGuessInfo != null) {
                 getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(
@@ -259,11 +263,12 @@ class HomeDelegate : BottomItemDelegate() {
             }
         }
 
+        //签到
         header.btn_sign.setOnClickListener {
             if (LoginUtils.isLogin()) {
-                //签到
                 getParentDelegate<BaseDelegate>().start(WebDelegateImpl.create(
                         ApiStores.URL_WEB + "#/signIN"))
+
             } else {
                 DialogUtils.showLoginAlertDiaLog(getParentDelegate())
             }
@@ -275,7 +280,6 @@ class HomeDelegate : BottomItemDelegate() {
         initBanners()
         getHeadData()
     }
-
 
     private val mBannerImages: MutableList<BannerListBean> = mutableListOf()
 
@@ -530,6 +534,8 @@ class HomeDelegate : BottomItemDelegate() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun onMessageEvent(event: MessageEvent) {
-        doRefresh()
+        if (event.id == MessageEvent.HOME_UPDATE) {
+            doRefresh()
+        }
     }
 }

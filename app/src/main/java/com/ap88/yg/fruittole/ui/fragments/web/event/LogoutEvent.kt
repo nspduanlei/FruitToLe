@@ -15,8 +15,7 @@ class LogoutEvent : Event() {
 //        Toast.makeText(context, params, Toast.LENGTH_LONG).show()
         Log.e("test0001", params)
 
-        val token = ""
-        LoginUtils.token = token
+        LoginUtils.token = ""
 
         EventBus.getDefault().post(MessageEvent(MessageEvent.USER_UPDATE))
 

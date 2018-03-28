@@ -13,11 +13,11 @@ import rx.Observable
 interface ApiStores {
     companion object {
         //baseUrl
-        const val API_SERVER_URL = "https://yg.ap88.com/"
-//        const val API_SERVER_URL = "http://192.168.7.21:8889/"
+//        const val API_SERVER_URL = "https://yg.ap88.com/"
+        const val API_SERVER_URL = "http://192.168.7.21:8889/"
 
-        const val URL_WEB = "https://yg.ap88.com/"
-//        const val URL_WEB = "http://192.168.7.64/"
+//        const val URL_WEB = "https://yg.ap88.com/"
+        const val URL_WEB = "http://192.168.7.64/"
 //        const val URL_WEB = "http://192.168.7.21:8889/"
 
         const val PAGE_SIZE = 15

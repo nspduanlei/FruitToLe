@@ -29,6 +29,7 @@ class App : Application() {
                 .addEvent("pubCircle", PubCircleEvent())
                 .addEvent("pubSD", PubSDEvent())
                 .addEvent("replaceLogin", ReplaceLoginEvent())
+                .addEvent("selLocation", SelLocationEvent())
 
     }
 }

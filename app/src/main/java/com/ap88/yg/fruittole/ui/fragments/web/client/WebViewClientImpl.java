@@ -4,16 +4,15 @@ import android.graphics.Bitmap;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import com.ap88.yg.fruittole.data.server.ApiStores;
 import com.ap88.yg.fruittole.extensions.DelegatesExt;
 import com.ap88.yg.fruittole.ui.fragments.web.IPageLoadListener;
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegate;
 import com.ap88.yg.fruittole.ui.fragments.web.route.Router;
 
-
 /**
  * Created by duanlei on 2018/1/6.
+ *
  */
 public class WebViewClientImpl extends WebViewClient {
 

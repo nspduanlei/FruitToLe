@@ -31,6 +31,10 @@ android {
         }
     }
 
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [TD_CHANNEL_ID: name]
+    }
+
     productFlavors {
         dev {}
         prod {}
@@ -103,6 +107,9 @@ dependencies {
 
     //权限申请
     implementation 'com.yanzhenjie:permission:1.1.2'
+
+    //友盟统计
+    implementation 'com.umeng.analytics:analytics:6.1.4'
 
 }
 
