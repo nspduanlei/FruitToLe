@@ -12,7 +12,7 @@ import com.ap88.yg.fruittole.ui.activities.base.PermissionActivity
 import com.ap88.yg.fruittole.ui.fragments.BottomDelegate
 import com.ap88.yg.fruittole.ui.fragments.base.BaseDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.chromeclient.WebChromeClientImpl
-import com.ap88.yg.fruittole.utils.L
+import com.ap88.yg.fruittole.utils.AppUtils
 import com.pgyersdk.update.PgyUpdateManager
 import com.pgyersdk.update.UpdateManagerListener
 import com.yuyh.library.imgsel.ImgSelActivity
@@ -41,27 +41,29 @@ class MainActivity : PermissionActivity() {
                 // 将新版本信息封装到AppBean中
                 val appBean = getAppBeanFromString(result)
 
-                L.e(appBean.downloadURL)
+                val verCode = appBean.versionCode.toInt()
+                if (verCode > AppUtils.getVersionCode(this@MainActivity)) {
+                    AlertDialog.Builder(this@MainActivity)
+                            .setTitle("发现新更新 v" + appBean.versionName)
+                            .setMessage(appBean.releaseNote)
+                            .setPositiveButton(
+                                    "确定",
+                                    DialogInterface.OnClickListener { _, _ ->
 
-                AlertDialog.Builder(this@MainActivity)
-                        .setTitle("发现新更新 v" + appBean.versionName)
-                        .setMessage(appBean.releaseNote)
-                        .setPositiveButton(
-                                "确定",
-                                DialogInterface.OnClickListener { _, _ ->
+                                        startDownloadTask(
+                                                this@MainActivity,
+                                                appBean.downloadURL)
 
-                                    startDownloadTask(
-                                            this@MainActivity,
-                                            appBean.downloadURL)
+                                    }
+                            )
+                            .setNegativeButton(
+                                    "取消",
+                                    DialogInterface.OnClickListener { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                            ).show()
+                }
 
-                                }
-                        )
-                        .setNegativeButton(
-                                "取消",
-                                DialogInterface.OnClickListener { dialog, _ ->
-                                    dialog.dismiss()
-                                }
-                        ).show()
             }
 
         })

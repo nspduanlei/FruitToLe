@@ -20,7 +20,7 @@ class ActionDelegate: BaseDelegate() {
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
 
         tv_req_buy.setOnClickListener{
-            if (checkLogin(getParentDelegate())) {
+            if (checkLogin(this)) {
                 this.start(WebDelegateImpl.create(ApiStores.URL_WEB + "#/pbuy?Info=BUY"))
             }
         }
