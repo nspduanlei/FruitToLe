@@ -526,13 +526,12 @@ class HomeDelegate : BottomItemDelegate() {
                 })
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public fun onMessageEvent(event: MessageEvent) {
         if (event.id == MessageEvent.HOME_UPDATE) {
             doRefresh()

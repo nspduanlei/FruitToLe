@@ -166,3 +166,20 @@
 -dontwarn android.webkit.WebViewClient
 
 -dontwarn com.yanzhenjie.permission.**
+
+-printmapping mapping.txt
+
+#蒲公英
+#-libraryjars libs/pgyer_sdk_x.x.jar
+-dontwarn com.pgyersdk.**
+-keep class com.pgyersdk.** { *; }
+
+#EventBus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+#fastjson
+-dontwarn com.alibaba.fastjson.**

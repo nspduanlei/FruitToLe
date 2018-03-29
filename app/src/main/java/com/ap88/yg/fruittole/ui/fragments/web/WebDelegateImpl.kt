@@ -58,6 +58,7 @@ class WebDelegateImpl : WebDelegate() {
             StatusBarCompat.translucentStatusBar(activity!!, true)
         }
     }
+
     private fun showBg() {
         if (activity != null) {
             //activity!!.window.setBackgroundDrawableResource(R.color.colorBlack)
@@ -137,4 +138,19 @@ class WebDelegateImpl : WebDelegate() {
             super.onBackPressedSupport()
         }
     }
+
+    public fun pageBack() {
+        if (activity == null || !isAdded || isHidden) {
+            return
+        }
+        activity!!.runOnUiThread {
+            if (webView != null && webView.canGoBack()) {
+                webView.goBack()
+            } else {
+                this.pop()
+            }
+        }
+    }
+
+
 }

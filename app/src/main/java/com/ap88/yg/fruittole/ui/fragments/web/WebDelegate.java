@@ -72,7 +72,8 @@ public abstract class WebDelegate extends BaseDelegate implements IWebViewInitia
 
   public WebView getWebView() {
     if (mWebView == null) {
-      throw new NullPointerException("WebView IS NULL!");
+      return null;
+      //throw new NullPointerException("WebView IS NULL!");
     }
     return mIsWebViewAvailable ? mWebView : null;
   }

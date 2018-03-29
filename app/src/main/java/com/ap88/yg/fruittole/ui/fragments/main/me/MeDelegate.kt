@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.ThreadMode
 class MeDelegate: BottomItemDelegate() {
 
     override fun setLayout(): Any {
-        return R.layout.delegate_web
+        return R.layout.delegate_me
     }
 
     private lateinit var webDelegateImpl: WebDelegateImpl
@@ -29,6 +29,8 @@ class MeDelegate: BottomItemDelegate() {
         loadRootFragment(R.id.fl_contains, webDelegateImpl)
 
         EventBus.getDefault().register(this)
+
+        //tv_version.text = AppUtils.getVersionName(context)
     }
 
     private fun update() {

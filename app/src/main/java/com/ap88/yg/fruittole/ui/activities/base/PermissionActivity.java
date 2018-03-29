@@ -16,8 +16,8 @@ import java.util.List;
 
 /**
  * Created by duanlei on 2018/3/23.
+ *
  */
-
 public abstract class PermissionActivity extends ProxyActivity {
 
   private static final int REQUEST_CODE_START = 100;

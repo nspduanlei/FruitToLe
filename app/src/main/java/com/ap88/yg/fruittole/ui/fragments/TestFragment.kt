@@ -9,10 +9,8 @@ import android.support.v4.app.Fragment
  */
 class TestFragment: Fragment() {
 
-
     companion object {
         private const val TODO_ID_KEY: String = "todo_id_key"
-
         fun newInstance(id: String): TestFragment {
             var args: Bundle = Bundle()
             args.putString(TODO_ID_KEY, id)
@@ -21,7 +19,6 @@ class TestFragment: Fragment() {
             return testFragment
         }
     }
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -7,17 +7,34 @@ static def releaseTime() {
 }
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'duanlei'
+            keyPassword '455483293'
+            storeFile file('duanleiKey.jks')
+            storePassword '455483293'
+        }
+    }
+
     compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
         applicationId "com.ap88.yg.fruittole"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 103
-        versionName "1.0.3"
+        versionCode 105
+        versionName "1.0.5"
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.config
+            manifestPlaceholders = [BUILD_TYPE:"debug"]
+        }
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.config
+            minifyEnabled true
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             applicationVariants.all { variant ->
@@ -28,6 +45,7 @@ android {
                     }
                 }
             }
+            manifestPlaceholders = [BUILD_TYPE:"release"]
         }
     }
 
@@ -42,7 +60,6 @@ android {
 
     flavorDimensions "default"
 }
-
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -59,7 +76,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
 
     //Fragment依赖
-
     // implementation 'me.yokeyword:fragmentation:1.2.7'
     implementation 'me.yokeyword:fragmentation-swipeback:1.2.7'
 
@@ -109,8 +125,9 @@ dependencies {
     implementation 'com.yanzhenjie:permission:1.1.2'
 
     //友盟统计
-    implementation 'com.umeng.analytics:analytics:6.1.4'
+//    implementation 'com.umeng.analytics:analytics:6.1.4'
 
+    implementation 'com.pgyersdk:sdk:2.8.1'
 }
 
 kotlin {

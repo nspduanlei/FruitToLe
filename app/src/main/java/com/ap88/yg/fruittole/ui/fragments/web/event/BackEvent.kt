@@ -1,5 +1,6 @@
 package com.ap88.yg.fruittole.ui.fragments.web.event
 
+import com.ap88.yg.fruittole.utils.AvoidFastRunUtils
 import com.ap88.yg.fruittole.utils.T
 
 /**
@@ -11,7 +12,9 @@ class BackEvent : Event() {
     override fun execute(params: String): String? {
         T.showShort(context, params)
 
-        delegate.pop()
+        if (AvoidFastRunUtils.isFastClick()) {
+            delegate.pop()
+        }
 
         return null
     }

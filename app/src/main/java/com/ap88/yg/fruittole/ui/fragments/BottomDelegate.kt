@@ -12,8 +12,8 @@ import com.ap88.yg.fruittole.ui.fragments.main.source.SourceDelegate
 
 /**
  * Created by duanlei on 2018/2/2.
+ *
  */
-
 class BottomDelegate: BaseBottomDelegate() {
     override fun setItems():
             LinkedHashMap<BottomTabBean, BaseDelegate> {
