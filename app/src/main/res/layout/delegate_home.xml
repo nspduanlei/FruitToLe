@@ -30,12 +30,15 @@
         <TextView
             android:id="@+id/tv_sel_location"
             android:layout_width="wrap_content"
+            android:maxWidth="80dp"
+            android:ellipsize="end"
+            android:lines="1"
             android:layout_height="match_parent"
             android:drawablePadding="5dp"
             android:drawableRight="@drawable/arrow_bot"
             android:gravity="center"
             android:paddingRight="12dp"
-            android:text="烟台"
+            android:text="全国"
             android:textColor="@color/colorWhite"/>
 
         <TextView

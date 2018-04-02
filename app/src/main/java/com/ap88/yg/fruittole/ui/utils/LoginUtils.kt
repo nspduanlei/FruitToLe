@@ -12,6 +12,9 @@ import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
 object LoginUtils {
     var token: String by DelegatesExt.preference(App.instance.applicationContext,
             "token", "")
+    var cityName: String by DelegatesExt.preference(App.instance.applicationContext,
+            "cityName", "")
+
 
     fun isLogin(): Boolean {
         return !token.isEmpty()

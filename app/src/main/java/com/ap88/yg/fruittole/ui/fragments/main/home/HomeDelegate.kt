@@ -535,6 +535,23 @@ class HomeDelegate : BottomItemDelegate() {
     public fun onMessageEvent(event: MessageEvent) {
         if (event.id == MessageEvent.HOME_UPDATE) {
             doRefresh()
+        } else if (event.id == MessageEvent.CITY_SELECT) {
+            tv_sel_location.text = LoginUtils.cityName
+        }
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+
+        if (header == null) {
+            return
+        }
+        if (hidden) {
+            header.convenientBanner.stopTurning()
+            header.marquee_view.stopFlipping()
+        } else {
+            header.convenientBanner.startTurning(10000)
+            header.marquee_view.startFlipping()
         }
     }
 }

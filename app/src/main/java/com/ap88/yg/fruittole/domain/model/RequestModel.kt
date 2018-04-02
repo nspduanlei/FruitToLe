@@ -66,4 +66,4 @@ data class PreSearch(val keyword: String, val searchType: String)
 
 data class MyProductTag(val className: String, val sort: Int, val tagName: String)
 
-
+data class MyCity(val code: String, val name: String, val id: Int)

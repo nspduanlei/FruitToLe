@@ -89,7 +89,7 @@ class MainActivity : PermissionActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        PgyUpdateManager.unregister();
+        PgyUpdateManager.unregister()
     }
 
 }
