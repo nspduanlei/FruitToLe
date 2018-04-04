@@ -13,11 +13,11 @@ import rx.Observable
 interface ApiStores {
     companion object {
         //baseUrl
-//        const val API_SERVER_URL = "https://yg.ap88.com/"  //正式环境（网页）
-        const val API_SERVER_URL = "http://192.168.7.21:8889/" //周瑶的环境（网页）
+        const val API_SERVER_URL = "https://yg.ap88.com/"  //正式环境（网页）
+//        const val API_SERVER_URL = "http://192.168.7.21:8889/" //周瑶的环境（网页）
 
-//        const val URL_WEB = "https://yg.ap88.com/" //正式环境（接口）
-        const val URL_WEB = "http://192.168.7.64/"   //测试环境（接口）
+        const val URL_WEB = "https://yg.ap88.com/" //正式环境（接口）
+//        const val URL_WEB = "http://192.168.7.64/"   //测试环境（接口）
 
         const val PAGE_SIZE = 15
     }
