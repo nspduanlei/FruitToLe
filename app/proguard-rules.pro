@@ -183,3 +183,8 @@
 
 #fastjson
 -dontwarn com.alibaba.fastjson.**
+
+#图片上传
+-keepclassmembers class * extends android.webkit.WebChromeClient {
+    public void openFileChooser(...);
+}
