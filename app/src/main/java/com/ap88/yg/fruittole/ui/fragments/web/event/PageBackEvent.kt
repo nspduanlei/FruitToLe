@@ -1,5 +1,5 @@
-package com.ap88.yg.fruittole.ui.fragments.web.event
 
+package com.ap88.yg.fruittole.ui.fragments.web.event
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
 import com.ap88.yg.fruittole.utils.AvoidFastRunUtils
 import com.ap88.yg.fruittole.utils.T

@@ -77,7 +77,6 @@ class MainActivity : PermissionActivity() {
         super.onActivityResult(requestCode, resultCode, intent)
 
         if (requestCode == WebChromeClientImpl.REQUEST_INPUT_FILE) {
-
             val result = if (intent == null || resultCode != Activity.RESULT_OK) null else
                 intent.getStringArrayListExtra(ImgSelActivity.INTENT_RESULT)
 
