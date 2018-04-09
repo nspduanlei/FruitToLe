@@ -18,8 +18,8 @@ import java.util.List;
 
 /**
  * Created by duanlei on 2018/1/8.
+ *
  */
-
 public class WebChromeClientImpl extends WebChromeClient {
 
   private WebViewProgressBar mWebViewProgressBar;

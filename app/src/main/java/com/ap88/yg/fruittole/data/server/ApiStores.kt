@@ -48,6 +48,10 @@ interface ApiStores {
     //获取默认搜索关键字
     @POST("yg-systemConfig-service/preSearch/getPreSearchInfo.apec")
     fun getPreSearch(@Body requestBody: RequestBody): Observable<Result<PreSearch>>
+
+    //是否签到
+    @POST("_node_user/_check_sign.apno")
+    fun checkSign(): Observable<Result<CheckSign>>
     /**
      * ------------------首页接口 end----------------
      */

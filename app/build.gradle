@@ -21,8 +21,8 @@ android {
         applicationId "com.ap88.yg.fruittole"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 108
-        versionName "1.0.8"
+        versionCode 109
+        versionName "1.0.9"
     }
     buildTypes {
         debug {

@@ -27,6 +27,7 @@ import com.ap88.yg.fruittole.ui.utils.DialogUtils
 import com.ap88.yg.fruittole.ui.utils.LoginUtils
 import com.ap88.yg.fruittole.ui.widget.FlowLayout
 import com.ap88.yg.fruittole.utils.RequestUtils
+import com.ap88.yg.fruittole.utils.T
 import com.ap88.yg.fruittole.utils.model.MenuEntity
 import com.bigkoo.convenientbanner.ConvenientBanner
 import com.jcodecraeer.xrecyclerview.ProgressStyle
@@ -95,6 +96,7 @@ class HomeDelegate : BottomItemDelegate() {
         getMqMessageData()
         getGuessInfoData()
     }
+
 
     var totalDy = 0
 
@@ -525,6 +527,27 @@ class HomeDelegate : BottomItemDelegate() {
                     }
                 })
     }
+
+
+    private fun checkSign() {
+        addSubscription(ApiClient.retrofit().checkSign(),
+                object : ApiCallback<Result<CheckSign>>() {
+                    override fun onSuccess(t: Result<CheckSign>) {
+                        if (t.succeed) {
+                            T.showShort(activity, "已签到")
+                        }
+                    }
+
+                    override fun onFailure(msg: String?) {
+                    }
+
+                    override fun onFinish() {
+                    }
+                })
+    }
+
+
+
 
     override fun onDestroy() {
         super.onDestroy()

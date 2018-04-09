@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.webkit.URLUtil
 import android.webkit.WebView
 import com.ap88.yg.fruittole.extensions.DelegatesExt
 import com.ap88.yg.fruittole.ui.App
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegate
 import com.ap88.yg.fruittole.ui.fragments.web.WebDelegateImpl
+import com.ap88.yg.fruittole.utils.L
 
 
 /**
@@ -31,27 +31,13 @@ class Router private constructor() {
     private var curUrl: String by DelegatesExt.preference(App.instance.applicationContext, "curUrl", "")
 
     fun handleWebUrl(delegate: WebDelegate, url: String): Boolean {
-        var url = url
-        Log.e("test0001", "url-------------$url")
+        L.e("test0001", "url-------------$url")
 
         //如果是电话协议
         if (url.contains("tel:")) {
             callPhone(delegate.context, url)
             return true
         }
-
-        //----------控制请求路由---------
-//        if (url.contains("page:")) {
-//            url = url.replaceFirst("page".toRegex(), "http")
-//            Log.e("test0001", "url replace-----------$url")
-//            //      return true;
-//        }
-//        Log.e("test0001", "curUrl--------------$curUrl")
-//        if (url == curUrl) {
-//           return true
-//        }
-//        curUrl = url
-        //-----------控制请求路由end------
 
         val topDelegate = delegate.topDelegate
         val webDelegate = WebDelegateImpl.create(url)
