@@ -12,8 +12,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.ap88.yg.fruittole.R
-import com.ap88.yg.fruittole.data.server.ApiCallback
-import com.ap88.yg.fruittole.data.server.ApiClient
 import com.ap88.yg.fruittole.data.server.ApiStores
 import com.ap88.yg.fruittole.domain.model.*
 import com.ap88.yg.fruittole.ui.adapters.CommonRecyclerAdapter
@@ -26,8 +24,6 @@ import com.ap88.yg.fruittole.ui.utils.AliYun
 import com.ap88.yg.fruittole.ui.utils.DialogUtils
 import com.ap88.yg.fruittole.ui.utils.LoginUtils
 import com.ap88.yg.fruittole.ui.widget.FlowLayout
-import com.ap88.yg.fruittole.utils.RequestUtils
-import com.ap88.yg.fruittole.utils.T
 import com.ap88.yg.fruittole.utils.model.MenuEntity
 import com.bigkoo.convenientbanner.ConvenientBanner
 import com.jcodecraeer.xrecyclerview.ProgressStyle
@@ -45,11 +41,17 @@ import java.util.*
  * Created by duanlei on 2018/2/1.
  *
  */
-class HomeDelegate : BottomItemDelegate() {
+class HomeDelegate : BottomItemDelegate(), IHome.View {
 
     private lateinit var mAdapter: CommonRecyclerAdapter<AppleBean>
     override fun setLayout() = R.layout.delegate_home
+
+    private lateinit var mPresenter: IHome.Presenter
+
     override fun onBindView(savedInstanceState: Bundle?, rootView: View) {
+
+        mPresenter = HomePresenter(this)
+
         //设置滑动列表头部
         initList()
 
@@ -85,18 +87,17 @@ class HomeDelegate : BottomItemDelegate() {
      * 获取数据
      */
     private fun getData() {
-        getListData()
-        getPreSearchInfo()
+        mPresenter.getListData(mCurPageNum)
+        mPresenter.getPreSearchInfo()
     }
 
     private fun getHeadData() {
-        getWeeklyListData(rankingTypeF)
-        getWeeklyListData(rankingTypeA)
-        getBannerListData()
-        getMqMessageData()
-        getGuessInfoData()
+        mPresenter.getWeeklyListData(rankingTypeF)
+        mPresenter.getWeeklyListData(rankingTypeA)
+        mPresenter.getBannerListData()
+        mPresenter.getMqMessageData()
+        mPresenter.getGuessInfoData()
     }
-
 
     var totalDy = 0
 
@@ -128,7 +129,7 @@ class HomeDelegate : BottomItemDelegate() {
 
     private var mIsEnd = false
 
-    public fun doRefresh() {
+    private fun doRefresh() {
         mIsEnd = false
         totalDy = 0
         if (mWeeklyListAdapter != null) {
@@ -157,7 +158,7 @@ class HomeDelegate : BottomItemDelegate() {
                     return
                 }
                 mCurPageNum++
-                getListData()
+                mPresenter.getListData(mCurPageNum)
             }
         })
 
@@ -331,75 +332,6 @@ class HomeDelegate : BottomItemDelegate() {
     private val rankingTypeF = "FRUITING_PEOPLE"
     private val rankingTypeA = "ACTIVE_MAN"
 
-    private fun getWeeklyListData(rankingType: String) {
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["rankingType"] = rankingType
-
-        addSubscription(ApiClient.retrofit().getWeeklyList(RequestUtils.getRequestBody(params)),
-                object : ApiCallback<Result<List<WeeklyListBean>>>() {
-                    override fun onSuccess(t: Result<List<WeeklyListBean>>) {
-                        //每周上榜填充类型字段
-                        for (item in t.data) {
-                            item.listType = rankingType
-                        }
-
-                        mWeeklyListAdapter!!.addAll(t.data)
-                    }
-
-                    override fun onFailure(msg: String?) {
-                    }
-
-                    override fun onFinish() {
-                    }
-                })
-    }
-
-    /**
-     * 获取轮播图
-     */
-    private fun getBannerListData() {
-        val params: MutableMap<String, String> = mutableMapOf()
-        params["category"] = "HOMEPAGE"
-        params["channelCode"] = "HOME_BARNNER"
-
-        addSubscription(ApiClient.retrofit().getBannerList(RequestUtils.getRequestBody(params)),
-                object : ApiCallback<Result<List<BannerListBean>>>() {
-                    override fun onSuccess(t: Result<List<BannerListBean>>) {
-                        mBannerImages.clear()
-                        mBannerImages.addAll(t.data)
-                        header.convenientBanner.notifyDataSetChanged()
-                    }
-
-                    override fun onFailure(msg: String?) {
-                    }
-
-                    override fun onFinish() {
-                    }
-                })
-    }
-
-    private fun getMqMessageData() {
-        val params: MutableMap<String, Any> = mutableMapOf()
-        params["auditState"] = "Y"
-        params["pageSize"] = 10
-        params["pageNumber"] = 1
-        params["realm"] = "ARTICLE"
-
-        addSubscription(ApiClient.retrofit().getMqMessageList(RequestUtils.getRequestBody(params)),
-                object : ApiCallback<Result<ListPage<MqInfoBean>>>() {
-                    override fun onSuccess(t: Result<ListPage<MqInfoBean>>) {
-                        fillMqMessageData(t.data.rows)
-                    }
-
-                    override fun onFailure(msg: String?) {
-                    }
-
-                    override fun onFinish() {
-                    }
-                })
-    }
-
-
     private fun fillMqMessageData(mqMessage: List<MqInfoBean>) {
         marqueeViews.clear()
 
@@ -438,116 +370,9 @@ class HomeDelegate : BottomItemDelegate() {
         header.marquee_view.setViews(marqueeViews)
     }
 
-    var mGuessInfo: GuessInfo? = null
-
-    private fun getGuessInfoData() {
-        addSubscription(ApiClient.retrofit().getGuessInfo(),
-                object : ApiCallback<Result<GuessInfo>>() {
-                    override fun onSuccess(t: Result<GuessInfo>) {
-
-                        mGuessInfo = t.data
-                        if (mGuessInfo == null) {
-                            header.ll_guess.visibility = View.GONE
-                            return
-                        } else {
-                            header.ll_guess.visibility = View.VISIBLE
-                        }
-
-                        header.tv_guess_count.text = t.data.totalUser.toString()
-                        header.tv_guess_title.text = String.format("%s(%s)",
-                                t.data.title, t.data.content)
-
-                        val pLeft: Int = if (t.data.totalUser == 0) {
-                            50
-                        } else {
-                            ((t.data.quotationHigh.toFloat() / t.data.totalUser.toFloat()) * 100).toInt()
-                        }
-                        header.guessView.setProgress(pLeft)
-                    }
-
-                    override fun onFailure(msg: String?) {
-                    }
-
-                    override fun onFinish() {
-                    }
-                })
-    }
+    private var mGuessInfo: GuessInfo? = null
 
     var mCurPageNum: Int = 1
-
-    private fun getListData() {
-        val params: MutableMap<String, Any> = mutableMapOf()
-        params["keyWord"] = ""
-        params["orderType"] = "DATEDES"
-        params["pageSize"] = ApiStores.PAGE_SIZE
-        params["pageNumber"] = mCurPageNum
-        params["searchType"] = ""
-        addSubscription(ApiClient.retrofit().getSupplyReqList(RequestUtils.getRequestBodyJson(params)),
-                object : ApiCallback<Result<ListPage<AppleBean>>>() {
-                    override fun onSuccess(t: Result<ListPage<AppleBean>>) {
-                        if (mCurPageNum == 1) { //刷新
-                            mAdapter.addAllC(t.data.rows)
-                            xrv_home.refreshComplete()
-                        } else {
-                            if (t.data.rows.size < ApiStores.PAGE_SIZE) {
-                                if (activity != null) {
-                                    activity!!.toast("没有更多记录")
-                                }
-                            }
-                            mAdapter.addAll(t.data.rows)
-                            xrv_home.loadMoreComplete()
-                        }
-
-                        if (t.data.rows.size < ApiStores.PAGE_SIZE) {
-                            mIsEnd = true
-                        }
-                    }
-
-                    override fun onFailure(msg: String?) {
-                    }
-
-                    override fun onFinish() {
-                    }
-                })
-    }
-
-    private fun getPreSearchInfo() {
-        val params: MutableMap<String, Any> = mutableMapOf()
-        params["searchType"] = "YZSS"
-        addSubscription(ApiClient.retrofit().getPreSearch(RequestUtils.getRequestBody(params)),
-                object : ApiCallback<Result<PreSearch>>() {
-                    override fun onSuccess(t: Result<PreSearch>) {
-                        tv_search.text = t.data.keyword
-                    }
-
-                    override fun onFailure(msg: String?) {
-                    }
-
-                    override fun onFinish() {
-                    }
-                })
-    }
-
-
-    private fun checkSign() {
-        addSubscription(ApiClient.retrofit().checkSign(),
-                object : ApiCallback<Result<CheckSign>>() {
-                    override fun onSuccess(t: Result<CheckSign>) {
-                        if (t.succeed) {
-                            T.showShort(activity, "已签到")
-                        }
-                    }
-
-                    override fun onFailure(msg: String?) {
-                    }
-
-                    override fun onFinish() {
-                    }
-                })
-    }
-
-
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -576,5 +401,75 @@ class HomeDelegate : BottomItemDelegate() {
             header.convenientBanner.startTurning(10000)
             header.marquee_view.startFlipping()
         }
+    }
+
+    /**
+     * ----------------网络请求返回处理---------------------
+     */
+    override fun getWeeklyListDataSuc(data: MutableList<WeeklyListBean>, rankingType: String) {
+        //每周上榜填充类型字段
+        for (item in data) {
+            item.listType = rankingType
+        }
+
+        mWeeklyListAdapter!!.addAll(data)
+    }
+
+    override fun getBannerListDataSuc(data: MutableList<BannerListBean>) {
+        mBannerImages.clear()
+        mBannerImages.addAll(data)
+        header.convenientBanner.notifyDataSetChanged()
+    }
+
+    override fun getMqMessageDataSuc(data: ListPage<MqInfoBean>) {
+        fillMqMessageData(data.rows)
+    }
+
+    override fun getGuessInfoDataSuc(data: GuessInfo) {
+        mGuessInfo = data
+        if (mGuessInfo == null) {
+            header.ll_guess.visibility = View.GONE
+            return
+        } else {
+            header.ll_guess.visibility = View.VISIBLE
+        }
+
+        header.tv_guess_count.text = data.totalUser.toString()
+        header.tv_guess_title.text = String.format("%s(%s)",
+                data.title, data.content)
+
+        val pLeft: Int = if (data.totalUser == 0) {
+            50
+        } else {
+            ((data.quotationHigh.toFloat() / data.totalUser.toFloat()) * 100).toInt()
+        }
+        header.guessView.setProgress(pLeft)
+    }
+
+    override fun getListDataSuc(data: ListPage<AppleBean>) {
+        if (mCurPageNum == 1) { //刷新
+            mAdapter.addAllC(data.rows)
+            xrv_home.refreshComplete()
+        } else {
+            if (data.rows.size < ApiStores.PAGE_SIZE) {
+                if (activity != null) {
+                    activity!!.toast("没有更多记录")
+                }
+            }
+            mAdapter.addAll(data.rows)
+            xrv_home.loadMoreComplete()
+        }
+
+        if (data.rows.size < ApiStores.PAGE_SIZE) {
+            mIsEnd = true
+        }
+    }
+
+    override fun getPreSearchInfoSuc(data: PreSearch) {
+        tv_search.text = data.keyword
+    }
+
+    override fun checkSignBack(data: CheckSign?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

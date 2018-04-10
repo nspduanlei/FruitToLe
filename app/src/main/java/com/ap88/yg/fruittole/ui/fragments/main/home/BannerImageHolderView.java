@@ -24,7 +24,6 @@ class BannerImageHolderView implements Holder<BannerListBean> {
 
   @Override
   public void UpdateUI(Context context, final int position, BannerListBean data) {
-//    Picasso.with(context).load(data.getContent()).into(imageView);
     ImageLoad.loadUrl(context, imageView, data.getContent());
   }
 }

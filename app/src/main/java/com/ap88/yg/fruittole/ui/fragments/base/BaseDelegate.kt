@@ -6,25 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment
-import rx.Observable
-import rx.Subscriber
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
-import rx.subscriptions.CompositeSubscription
 
 /**
  * Created by duanlei on 2018/2/2.
+ *
  */
 abstract class BaseDelegate : SwipeBackFragment() {
 
     abstract fun setLayout(): Any
     abstract fun onBindView(savedInstanceState: Bundle?, rootView: View)
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-
         val rootView = when (setLayout()) {
             is Int -> {
                 inflater.inflate(setLayout() as Int, container, false)
@@ -37,9 +30,6 @@ abstract class BaseDelegate : SwipeBackFragment() {
             }
         }
 
-//        rootView.setPadding(0, StateBarUtil.getStatusBarHeight(activity!!),
-//                0, 0)
-
         return rootView
     }
 
@@ -49,23 +39,6 @@ abstract class BaseDelegate : SwipeBackFragment() {
     }
 
     fun getProxyActivity(): FragmentActivity = _mActivity
-
-    private val mCompositeSubscription: CompositeSubscription = CompositeSubscription()
-
-    override fun onDestroy() {
-        if (mCompositeSubscription.hasSubscriptions()) {
-            //取消注册，以避免内存泄露
-            mCompositeSubscription.unsubscribe()
-        }
-        super.onDestroy()
-    }
-
-    open fun <M> addSubscription(observable: Observable<M>, subscriber: Subscriber<M>) {
-        mCompositeSubscription.add(
-                observable.observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(subscriber))
-    }
 
 
     fun <T : BaseDelegate> getParentDelegate(): T {
