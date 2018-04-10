@@ -45,4 +45,5 @@ abstract class BaseDelegate : SwipeBackFragment() {
         return parentFragment as T
     }
 
+
 }

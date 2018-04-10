@@ -6,11 +6,11 @@ package com.ap88.yg.fruittole.ui.fragments.base;
  */
 public abstract class HttpBaseDelegate extends BaseDelegate {
 
-  private IPresenter mPresenter = new HttpReqPresenter();
+  private HttpReqPresenter mPresenter = new HttpReqPresenter();
 
   @Override
   public void onDestroy() {
-    mPresenter.destroy();
+    mPresenter.cancelRequests();
     super.onDestroy();
   }
 }

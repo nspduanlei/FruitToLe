@@ -374,11 +374,6 @@ class HomeDelegate : BottomItemDelegate(), IHome.View {
 
     var mCurPageNum: Int = 1
 
-    override fun onDestroy() {
-        super.onDestroy()
-        EventBus.getDefault().unregister(this)
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public fun onMessageEvent(event: MessageEvent) {
         if (event.id == MessageEvent.HOME_UPDATE) {
@@ -471,5 +466,12 @@ class HomeDelegate : BottomItemDelegate(), IHome.View {
 
     override fun checkSignBack(data: CheckSign?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mPresenter.destroy()
+        EventBus.getDefault().unregister(this)
     }
 }

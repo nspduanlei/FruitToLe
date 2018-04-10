@@ -10,7 +10,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by duanlei on 2018/4/10.
  *
  */
-public class HttpReqPresenter implements IPresenter {
+public class HttpReqPresenter {
 
   private CompositeSubscription mCompositeSubscription = new CompositeSubscription();
 
@@ -21,13 +21,7 @@ public class HttpReqPresenter implements IPresenter {
             .subscribe(subscriber));
   }
 
-  @Override
-  public void start() {
-
-  }
-
-  @Override
-  public void destroy() {
+  public void cancelRequests() {
     if (mCompositeSubscription.hasSubscriptions()) {
       mCompositeSubscription.unsubscribe();
     }

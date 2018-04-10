@@ -8,6 +8,7 @@ import com.ap88.yg.fruittole.domain.model.ListPage;
 import com.ap88.yg.fruittole.domain.model.MqInfoBean;
 import com.ap88.yg.fruittole.domain.model.PreSearch;
 import com.ap88.yg.fruittole.domain.model.WeeklyListBean;
+import com.ap88.yg.fruittole.ui.fragments.base.IPresenter;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface IHome {
     void checkSignBack(CheckSign data);
   }
 
-  interface Presenter {
+  interface Presenter extends IPresenter {
     /**
      * 获取每周达人榜数据
      */

@@ -14,6 +14,13 @@ import com.ap88.yg.fruittole.utils.RequestUtils
 class HomePresenter internal constructor(private var mView: IHome.View) : HttpReqPresenter(),
         IHome.Presenter {
 
+    override fun destroy() {
+        cancelRequests()
+    }
+
+    override fun start() {
+    }
+
     override fun getWeeklyListData(rankingType: String) {
         val params: MutableMap<String, String> = mutableMapOf()
         params["rankingType"] = rankingType
